@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Comfort Menu</title>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ---------- Tokens ---------- */
+:root {
+  --bg: #F3F6F8;
+  --surface: #FFFFFF;
+  --ink: #12202E;
+  --ink-soft: #3D4F5F;
+  --line: #6B7C8A;
+  --primary: #005F56;
+  --primary-ink: #FFFFFF;
+  --tint: #DDEFEC;
+  --ticket: #FFD84A;
+  --ticket-ink: #12202E;
+  --bar-bg: #12202E;
+  --bar-ink: #FFFFFF;
+  --edge: 2px;
+  --font: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  font-size: 112.5%;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1A1F;
+    --surface: #16262D;
+    --ink: #F1F6F7;
+    --ink-soft: #B9C7CD;
+    --line: #7E919B;
+    --primary: #7FE0D2;
+    --primary-ink: #06221F;
+    --tint: #1F3B3B;
+    --bar-bg: #23363F;
+    --bar-ink: #FFFFFF;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1A1F;
+  --surface: #16262D;
+  --ink: #F1F6F7;
+  --ink-soft: #B9C7CD;
+  --line: #7E919B;
+  --primary: #7FE0D2;
+  --primary-ink: #06221F;
+  --tint: #1F3B3B;
+  --bar-bg: #23363F;
+  --bar-ink: #FFFFFF;
+}
+
+/* Large print format: bigger type, strongest contrast, heavier edges */
+:root[data-format="large"] {
+  font-size: 150%;
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --ink: #000000;
+  --ink-soft: #000000;
+  --line: #000000;
+  --primary: #000000;
+  --primary-ink: #FFFFFF;
+  --tint: #FFF2B0;
+  --bar-bg: #000000;
+  --bar-ink: #FFFFFF;
+  --edge: 3px;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-format="large"]:not([data-theme="light"]) {
+    --bg: #000000;
+    --surface: #000000;
+    --ink: #FFFFFF;
+    --ink-soft: #FFFFFF;
+    --line: #FFFFFF;
+    --primary: #FFD84A;
+    --primary-ink: #000000;
+    --tint: #3A3200;
+    --bar-bg: #1C1C1C;
+  }
+}
+:root[data-format="large"][data-theme="dark"] {
+  --bg: #000000;
+  --surface: #000000;
+  --ink: #FFFFFF;
+  --ink-soft: #FFFFFF;
+  --line: #FFFFFF;
+  --primary: #FFD84A;
+  --primary-ink: #000000;
+  --tint: #3A3200;
+  --bar-bg: #1C1C1C;
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: inherit; }
+html { height: 100%; scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+[hidden] { display: none !important; }
+h1, h2, h3, h4, p, ul, fieldset, legend { margin: 0; padding: 0; }
+ul { list-style: none; }
+fieldset { border: 0; min-width: 0; }
+h1 { font-size: 1.25rem; line-height: 1.2; }
+h2 { font-size: 1.953rem; line-height: 1.15; letter-spacing: -0.01em; }
+h3 { font-size: 1.25rem; line-height: 1.25; }
+h4 { font-size: 1rem; line-height: 1.3; }
+h2:focus, h3:focus { outline: none; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+.wrap { width: 100%; max-width: 46rem; margin-inline: auto; padding-inline: 1rem; }
+main { flex: 1; padding-block: 1.5rem 2.5rem; }
+main:focus { outline: none; }
+
+.skip {
+  position: absolute; left: 1rem; top: -10rem;
+  background: var(--ink); color: var(--bg);
+  padding: 0.75rem 1rem; font-weight: 700; border-radius: 0.5rem; z-index: 10;
+}
+.skip:focus { top: calc(env(safe-area-inset-top, 0px) + 0.5rem); }
+
+/* ---------- Controls ---------- */
+button, input, select, textarea { font: inherit; color: inherit; }
+.btn, .btn-quiet {
+  min-height: 2.75rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1.2;
+}
+.btn { background: var(--primary); color: var(--primary-ink); border: var(--edge) solid var(--primary); }
+.btn-quiet { background: transparent; color: var(--ink); border: var(--edge) solid var(--ink); }
+.btn:hover, .btn-quiet:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+label, legend { font-weight: 700; display: block; }
+input[type="text"], input[type="number"], select, textarea {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--surface);
+  color: var(--ink);
+  border: var(--edge) solid var(--ink);
+  border-radius: 0.5rem;
+}
+input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color: var(--primary); flex: none; }
+.check { display: flex; align-items: center; gap: 0.6rem; min-height: 2.75rem; }
+.check label { font-weight: 400; }
+.hint, .lead, .sub { color: var(--ink-soft); }
+
+/* ---------- Header ---------- */
+.top { border-bottom: var(--edge) solid var(--ink); background: var(--surface); }
+.top-in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; padding-block: 0.75rem; }
+.sub { font-size: 0.889rem; }
+.format-now { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+
+/* ---------- Start: choose a format ---------- */
+.lead { margin-top: 0.5rem; max-width: 34rem; }
+.choices { display: grid; gap: 0.75rem; margin-top: 1.5rem; }
+@media (min-width: 36rem) { .choices { grid-template-columns: 1fr 1fr; } }
+.choice {
+  display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 0.9rem; align-items: center;
+  text-align: left;
+  padding: 1.1rem;
+  background: var(--surface);
+  border: var(--edge) solid var(--ink);
+  border-radius: 0.75rem;
+  cursor: pointer;
+}
+.choice:hover { background: var(--tint); }
+.choice .pic { grid-row: span 2; font-size: 2.441rem; line-height: 1; }
+.choice-name { font-size: 1.25rem; font-weight: 700; }
+.choice-desc { color: var(--ink-soft); }
+
+/* ---------- Menu: ask and filters ---------- */
+.ask { margin-top: 1.25rem; }
+.ask-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.4rem; }
+.ask-row input { flex: 1 1 14rem; }
+.filters { margin-top: 1rem; border: var(--edge) solid var(--line); border-radius: 0.5rem; background: var(--surface); }
+.filters summary { padding: 0.65rem 1rem; font-weight: 700; cursor: pointer; min-height: 2.75rem; }
+.filters-in { padding: 0.25rem 1rem 1rem; display: grid; gap: 1rem; }
+@media (min-width: 36rem) { .filter-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; } }
+.filter-pair > div + div { margin-top: 1rem; }
+@media (min-width: 36rem) { .filter-pair > div + div { margin-top: 0; } }
+.checks { display: flex; flex-wrap: wrap; gap: 0 1.5rem; }
+.notice { margin-top: 1rem; padding: 0.6rem 0.9rem; background: var(--tint); border-left: 0.4rem solid var(--primary); }
+.count { margin-top: 1rem; font-weight: 700; }
+
+/* ---------- Menu: list ---------- */
+.group { margin-top: 1.75rem; }
+.group h3 { padding-bottom: 0.4rem; border-bottom: var(--edge) solid var(--ink); }
+.item { display: grid; grid-template-columns: auto 1fr; gap: 0 0.9rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+.item .pic { font-size: 1.953rem; line-height: 1.1; }
+.item-head { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+.price { font-weight: 700; white-space: nowrap; }
+.desc { color: var(--ink-soft); }
+.item-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; }
+.empty { margin-top: 1.5rem; padding: 1rem; border: var(--edge) dashed var(--line); border-radius: 0.5rem; }
+
+/* ---------- Menu: pictures, one step at a time ---------- */
+.wiz-q { margin-top: 1rem; font-size: 1.563rem; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: 0.75rem; margin-top: 1rem; }
+.tile {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.25rem;
+  min-height: 9.5rem; padding: 0.9rem 0.6rem; text-align: center;
+  background: var(--surface); border: 3px solid var(--ink); border-radius: 1rem; cursor: pointer;
+}
+.tile:hover { background: var(--tint); }
+.tile .pic { font-size: 3.4rem; line-height: 1; }
+.tile-name { font-weight: 700; font-size: 1.125rem; line-height: 1.2; }
+.tile-has { font-size: 0.889rem; color: var(--ink-soft); }
+.wiz-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.25rem; }
+.wiz-actions .btn, .wiz-actions .btn-quiet { min-height: 3.5rem; font-size: 1.125rem; padding-inline: 1.5rem; }
+.wiz-order { margin-top: 1.25rem; font-weight: 700; }
+
+/* ---------- Order ticket ---------- */
+.ticket {
+  --ink: var(--ticket-ink);
+  --ink-soft: #2B3A47;
+  --line: var(--ticket-ink);
+  --surface: #FFFFFF;
+  --primary: var(--ticket-ink);
+  --primary-ink: var(--ticket);
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  background: var(--ticket);
+  color: var(--ticket-ink);
+  border: 3px solid var(--ticket-ink);
+  border-radius: 0.75rem;
+}
+.line { display: grid; grid-template-columns: 1fr auto; gap: 0.4rem 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--ticket-ink); }
+.line-name { font-size: 1.125rem; }
+.qty { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.qty .btn-quiet { min-width: 2.75rem; padding-inline: 0.8rem; }
+.total { display: flex; justify-content: space-between; gap: 1rem; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 3px dashed var(--ticket-ink); font-size: 1.25rem; font-weight: 700; }
+.note-field { margin-top: 1.25rem; }
+.ticket-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.25rem; }
+
+.crew .hello { font-size: 1.563rem; font-weight: 700; line-height: 1.2; }
+.crew .quiet-line { margin-top: 0.5rem; font-size: 1.125rem; }
+.crew .line { grid-template-columns: 1fr; }
+.crew .line-name { font-size: clamp(1.5rem, 5.5vw, 2.441rem); line-height: 1.2; }
+.crew .crew-note { margin-top: 0.75rem; font-size: 1.25rem; }
+.crew .total { font-size: 1.563rem; }
+.crew h3 { margin-top: 1.5rem; }
+.replies { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; }
+.big-say { margin-top: 0.75rem; min-height: 1.2em; font-size: clamp(2rem, 9vw, 3.8rem); font-weight: 700; line-height: 1.1; overflow-wrap: anywhere; }
+.crew textarea { font-size: 1.563rem; line-height: 1.3; margin-top: 0.4rem; }
+
+/* ---------- Bottom bar: captions for everything the page says ---------- */
+.bar {
+  --ink: var(--bar-ink);
+  --primary: var(--ticket);
+  --primary-ink: var(--ticket-ink);
+  position: sticky; bottom: 0;
+  background: var(--bar-bg); color: var(--bar-ink);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.bar-in { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; padding-block: 0.7rem; }
+.bar p { flex: 1 1 14rem; }
+.bar :focus-visible { outline-color: var(--ticket); }
+.bar--empty .bar-in { padding-block: 0; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+
+<header class="top">
+  <div class="wrap top-in">
+    <div>
+      <h1>Comfort Menu</h1>
+      <p class="sub">Sample menu from Corner Grill</p>
+    </div>
+    <div class="format-now" id="formatNow" hidden>
+      <p>Format: <strong id="formatLabel"></strong></p>
+      <button type="button" class="btn-quiet" id="changeFormat">Change format</button>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="wrap" tabindex="-1">
+
+  <section id="view-start" aria-labelledby="h-start">
+    <h2 id="h-start" tabindex="-1">How do you want this menu?</h2>
+    <p class="lead">Pick one. You can change it at any time. Your choice is saved for next time.</p>
+    <div class="choices" id="choices"></div>
+  </section>
+
+  <section id="view-menu" aria-labelledby="h-menu" hidden>
+    <h2 id="h-menu" tabindex="-1">Menu</h2>
+
+    <div id="listUI">
+      <form id="askForm" class="ask">
+        <label for="ask">Ask the menu</label>
+        <p id="askHint" class="hint">Example: chicken under $6 with no milk</p>
+        <div class="ask-row">
+          <input id="ask" type="text" autocomplete="off" aria-describedby="askHint">
+          <button class="btn" type="submit">Find</button>
+          <button class="btn-quiet" type="button" id="voiceBtn" hidden>Ask by voice</button>
+        </div>
+      </form>
+
+      <details class="filters" id="filters">
+        <summary>Filters</summary>
+        <div class="filters-in">
+          <div class="filter-pair">
+            <div>
+              <label for="fCat">Kind of food</label>
+              <select id="fCat"></select>
+            </div>
+            <div>
+              <label for="fMax">Most I want to pay, in dollars</label>
+              <input id="fMax" type="number" min="1" max="20" step="1" inputmode="decimal">
+            </div>
+          </div>
+          <fieldset>
+            <legend>Leave out food that contains</legend>
+            <div class="checks" id="fAllergens"></div>
+          </fieldset>
+          <div class="check">
+            <input type="checkbox" id="fVeg">
+            <label for="fVeg">Vegetarian only</label>
+          </div>
+          <div><button type="button" class="btn-quiet" id="clearBtn">Clear filters</button></div>
+        </div>
+      </details>
+
+      <p class="notice">Allergen details are sample data. Always confirm with staff.</p>
+      <p class="count" id="count"></p>
+      <div id="list"></div>
+    </div>
+
+    <div id="wizard" hidden></div>
+  </section>
+
+  <section id="view-card" aria-labelledby="h-card" hidden>
+    <h2 id="h-card" tabindex="-1">Check your order</h2>
+    <div id="card"></div>
+  </section>
+
+  <section id="view-crew" aria-labelledby="h-crew" hidden>
+    <h2 id="h-crew" tabindex="-1">Show this to the crew</h2>
+    <div id="crew"></div>
+  </section>
+
+</main>
+
+<div class="bar bar--empty" id="bar">
+  <div class="wrap bar-in">
+    <p id="caption" role="status"></p>
+    <button type="button" class="btn-quiet" id="stopBtn" hidden>Stop speaking</button>
+    <button type="button" class="btn" id="reviewBtn" hidden>Review my order</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ================= Data ================= */
+
+  var FORMATS = [
+    { id: 'listen',   name: 'Listen',      pic: '🔊', desc: 'The page reads the menu and your order out loud.' },
+    { id: 'large',    name: 'Large print', pic: '🔎', desc: 'Bigger text and the strongest contrast.' },
+    { id: 'pictures', name: 'Pictures',    pic: '🖼️', desc: 'One question at a time, with pictures and short words.' },
+    { id: 'quiet',    name: 'Quiet',       pic: '📝', desc: 'No sound. Show your order on the screen instead of saying it.' }
+  ];
+
+  var CATS = [
+    { id: 'burgers',   name: 'Burgers and sandwiches', pic: '🍔', words: [] },
+    { id: 'chicken',   name: 'Chicken',                pic: '🍗', words: [] },
+    { id: 'sides',     name: 'Sides',                  pic: '🍟', words: ['side', 'snack'] },
+    { id: 'breakfast', name: 'Breakfast',              pic: '🍳', words: ['breakfast', 'morning'] },
+    { id: 'drinks',    name: 'Drinks',                 pic: '🥤', words: ['drink', 'beverage', 'thirsty'] },
+    { id: 'desserts',  name: 'Desserts',               pic: '🍦', words: ['dessert', 'sweet'] }
+  ];
+
+  var ALLERGENS = [
+    { id: 'milk',  label: 'Milk',  syn: ['milk', 'dairy', 'cheese', 'lactose'] },
+    { id: 'egg',   label: 'Egg',   syn: ['eggs', 'egg'] },
+    { id: 'wheat', label: 'Wheat', syn: ['wheat', 'gluten'] },
+    { id: 'soy',   label: 'Soy',   syn: ['soy', 'soya'] },
+    { id: 'fish',  label: 'Fish',  syn: ['fish'] }
+  ];
+
+  /* Sample data only. Replace with the restaurant's official menu and allergen data. */
+  var MENU = [
+    { id: 'cheeseburger', cat: 'burgers', pic: '🍔', name: 'Classic cheeseburger', price: 5.49, desc: 'Beef patty, cheese, pickles, and a bun.', has: ['milk', 'wheat', 'soy'], veg: false, extra: ['burger', 'beef'] },
+    { id: 'hamburger', cat: 'burgers', pic: '🍔', name: 'Plain hamburger', price: 4.29, desc: 'Beef patty and a bun. Nothing else.', has: ['wheat', 'soy'], veg: false, extra: ['burger', 'beef'] },
+    { id: 'crispy', cat: 'burgers', pic: '🥪', name: 'Crispy chicken sandwich', price: 6.29, desc: 'Fried chicken, lettuce, and mayo on a bun.', has: ['wheat', 'egg', 'soy'], veg: false, extra: [] },
+    { id: 'wrap', cat: 'burgers', pic: '🌯', name: 'Grilled chicken wrap', price: 5.79, desc: 'Grilled chicken, lettuce, and tomato in a soft wrap.', has: ['wheat'], veg: false, extra: [] },
+    { id: 'veggie', cat: 'burgers', pic: '🌱', name: 'Veggie burger', price: 5.99, desc: 'Bean and vegetable patty, lettuce, and a bun.', has: ['wheat', 'soy'], veg: true, extra: ['burger'] },
+    { id: 'fish', cat: 'burgers', pic: '🐟', name: 'Fish sandwich', price: 5.69, desc: 'Fried fish, cheese, and tartar sauce on a bun.', has: ['fish', 'wheat', 'egg', 'milk'], veg: false, extra: [] },
+    { id: 'bites', cat: 'chicken', pic: '🍗', name: 'Chicken bites, 6 pieces', price: 4.99, desc: 'Small pieces of fried chicken.', has: ['wheat'], veg: false, extra: ['nugget'] },
+    { id: 'strips', cat: 'chicken', pic: '🍗', name: 'Chicken strips, 3 pieces', price: 5.29, desc: 'Long pieces of fried chicken.', has: ['wheat', 'egg'], veg: false, extra: ['tender'] },
+    { id: 'fries', cat: 'sides', pic: '🍟', name: 'Fries, medium', price: 2.99, desc: 'Salted potato fries.', has: [], veg: true, extra: ['potato'] },
+    { id: 'salad', cat: 'sides', pic: '🥗', name: 'Side salad', price: 3.49, desc: 'Lettuce, tomato, and cucumber.', has: [], veg: true, extra: [] },
+    { id: 'apple', cat: 'sides', pic: '🍎', name: 'Apple slices', price: 1.49, desc: 'Fresh apple, cut up.', has: [], veg: true, extra: ['fruit'] },
+    { id: 'muffin', cat: 'breakfast', pic: '🍳', name: 'Egg and cheese muffin', price: 4.19, desc: 'Egg and cheese on a toasted muffin.', has: ['egg', 'milk', 'wheat'], veg: true, extra: [] },
+    { id: 'oatmeal', cat: 'breakfast', pic: '🥣', name: 'Oatmeal with fruit', price: 3.29, desc: 'Warm oats with apple and berries.', has: [], veg: true, extra: [] },
+    { id: 'pancakes', cat: 'breakfast', pic: '🥞', name: 'Pancakes', price: 4.49, desc: 'Three pancakes with syrup.', has: ['wheat', 'egg', 'milk'], veg: true, extra: [] },
+    { id: 'water', cat: 'drinks', pic: '💧', name: 'Water', price: 1.29, desc: 'Bottle of water.', has: [], veg: true, extra: [] },
+    { id: 'juice', cat: 'drinks', pic: '🍊', name: 'Orange juice', price: 2.49, desc: 'Cold orange juice.', has: [], veg: true, extra: [] },
+    { id: 'coffee', cat: 'drinks', pic: '☕', name: 'Coffee', price: 1.99, desc: 'Hot coffee. Ask for milk or sugar.', has: [], veg: true, extra: [] },
+    { id: 'shake', cat: 'drinks', pic: '🥤', name: 'Chocolate milkshake', price: 3.99, desc: 'Cold, thick chocolate shake.', has: ['milk'], veg: true, extra: ['shake'] },
+    { id: 'cone', cat: 'desserts', pic: '🍦', name: 'Vanilla ice cream cone', price: 1.99, desc: 'Soft vanilla ice cream in a cone.', has: ['milk', 'wheat'], veg: true, extra: [] },
+    { id: 'pie', cat: 'desserts', pic: '🥧', name: 'Apple pie', price: 1.79, desc: 'Warm apple pie.', has: ['wheat'], veg: true, extra: [] }
+  ];
+
+  /* ================= Small helpers ================= */
+
+  function $(id) { return document.getElementById(id); }
+
+  function el(tag, props) {
+    var node = document.createElement(tag);
+    props = props || {};
+    Object.keys(props).forEach(function (key) {
+      var value = props[key];
+      if (value === null || value === undefined || value === false) return;
+      if (key === 'class') node.className = value;
+      else if (key === 'text') node.textContent = value;
+      else node.setAttribute(key, value === true ? '' : value);
+    });
+    for (var i = 2; i < arguments.length; i++) {
+      var kid = arguments[i];
+      if (kid === null || kid === undefined || kid === false) continue;
+      if (Array.isArray(kid)) kid.forEach(function (k) { if (k) node.append(k); });
+      else node.append(kid);
+    }
+    return node;
+  }
+
+  function usd(n) { return '$' + n.toFixed(2); }
+  function plural(n, word) { return n + ' ' + word + (n === 1 ? '' : 's'); }
+
+  var STOP = ['and', 'with', 'the', 'a', 'an', 'of', 'or', 'for', 'piece', 'medium', 'no', 'not', 'without',
+    'avoid', 'free', 'from', 'allergic', 'to', 'any', 'nor', 'vegetarian', 'veggie', 'meatless', 'meat'];
+
+  function singular(word) {
+    if (/(ches|shes|xes)$/.test(word)) return word.slice(0, -2);
+    if (/ies$/.test(word) && word.length > 4) return word.slice(0, -3) + 'y';
+    if (/s$/.test(word) && !/ss$/.test(word) && word.length > 3) return word.slice(0, -1);
+    return word;
+  }
+
+  function tokens(text) {
+    return text.toLowerCase().replace(/[^a-z\s]/g, ' ').split(/\s+/)
+      .map(singular)
+      .filter(function (w) { return w && STOP.indexOf(w) === -1; });
+  }
+
+  var byId = {};
+  var catById = {};
+  var vocab = {};
+  CATS.forEach(function (c) { catById[c.id] = c; });
+  MENU.forEach(function (item) {
+    var cat = catById[item.cat];
+    item.words = tokens(item.name + ' ' + cat.name + ' ' + cat.words.join(' ') + ' ' + item.extra.join(' '));
+    item.words.forEach(function (w) { vocab[w] = true; });
+    byId[item.id] = item;
+  });
+
+  function hasText(item) {
+    return item.has.length ? 'Contains ' + item.has.join(', ') + '.' : 'No listed allergens.';
+  }
+
+  /* ================= State ================= */
+
+  var state = {
+    format: null,
+    view: 'start',
+    filters: { cat: 'all', max: null, exclude: [], veg: false, words: [] },
+    order: [],            // [{ id, qty }]
+    note: '',
+    wiz: { step: 'cat', cat: null, last: null },
+    speaking: false
+  };
+
+  var canSpeak = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+  var Recognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+
+  function orderCount() { return state.order.reduce(function (n, l) { return n + l.qty; }, 0); }
+  function orderTotal() { return state.order.reduce(function (n, l) { return n + l.qty * byId[l.id].price; }, 0); }
+
+  /* ================= Speech and captions ================= */
+
+  function setCaption(text) {
+    var caption = $('caption');
+    caption.textContent = '';
+    window.requestAnimationFrame(function () {
+      caption.textContent = text;
+      renderBar();
+    });
+  }
+
+  function stopSpeaking() {
+    if (!canSpeak) return;
+    try { window.speechSynthesis.cancel(); } catch (e) { /* ignore */ }
+    state.speaking = false;
+    renderBar();
+  }
+
+  function speak(text) {
+    if (!canSpeak) return;
+    try {
+      window.speechSynthesis.cancel();
+      var utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.95;
+      utterance.onstart = function () { state.speaking = true; renderBar(); };
+      utterance.onend = utterance.onerror = function () { state.speaking = false; renderBar(); };
+      window.speechSynthesis.speak(utterance);
+    } catch (e) { /* speech is optional; the caption still shows the text */ }
+  }
+
+  /* Everything the page says goes through here, so speech always has a caption. */
+  function tell(text, aloud) {
+    setCaption(text);
+    if (state.format === 'quiet') return;
+    if (state.format === 'listen' || aloud) speak(text);
+  }
+
+  /* ================= Views ================= */
+
+  var VIEWS = ['start', 'menu', 'card', 'crew'];
+
+  function setView(view) {
+    state.view = view;
+    VIEWS.forEach(function (v) { $('view-' + v).hidden = v !== view; });
+    if (view === 'menu') renderMenu();
+    if (view === 'card') renderCard();
+    if (view === 'crew') renderCrew();
+    renderBar();
+    window.scrollTo(0, 0);
+    $('h-' + view).focus();
+  }
+
+  function renderBar() {
+    var review = $('reviewBtn');
+    var stop = $('stopBtn');
+    review.hidden = !(state.view === 'menu' && state.format !== 'pictures');
+    review.textContent = 'Review my order (' + plural(orderCount(), 'item') + ')';
+
+    var showStop = canSpeak && state.format !== 'quiet' && state.view !== 'start' &&
+      (state.format === 'listen' || state.speaking);
+    if (!showStop && document.activeElement === stop) {
+      stop.addEventListener('blur', renderBar, { once: true });
+    } else {
+      stop.hidden = !showStop;
+    }
+
+    var empty = !$('caption').textContent && review.hidden && stop.hidden;
+    $('bar').classList.toggle('bar--empty', empty);
+  }
+
+  /* ---------- Start ---------- */
+
+  function buildStart() {
+    var box = $('choices');
+    FORMATS.forEach(function (f) {
+      box.append(el('button', { type: 'button', class: 'choice', 'data-format': f.id },
+        el('span', { class: 'pic', 'aria-hidden': 'true', text: f.pic }),
+        el('span', { class: 'choice-name', text: f.name }),
+        el('span', { class: 'choice-desc', text: f.desc })
+      ));
+    });
+  }
+
+  function setFormat(id, quietly) {
+    var format = FORMATS.filter(function (f) { return f.id === id; })[0];
+    if (!format) return;
+    stopSpeaking();
+    state.format = id;
+    try { window.localStorage.setItem('comfortmenu.format', id); } catch (e) { /* storage is optional */ }
+    document.documentElement.setAttribute('data-format', id);
+    $('formatLabel').textContent = format.name;
+    $('formatNow').hidden = false;
+    $('listUI').hidden = id === 'pictures';
+    $('wizard').hidden = id !== 'pictures';
+    $('voiceBtn').hidden = !(Recognition && id !== 'quiet');
+    state.wiz = { step: 'cat', cat: null, last: null };
+    setView('menu');
+
+    if (quietly) { setCaption('Opened in your saved format: ' + format.name + '.'); return; }
+    if (id === 'listen' && !canSpeak) { setCaption('This browser cannot read aloud. The menu still works on screen.'); return; }
+    if (id === 'listen') tell('Menu open. ' + MENU.length + ' items. Type what you want in Ask the menu, or press Listen on any item.');
+    else if (id === 'pictures') setCaption('Pictures format. One question at a time.');
+    else if (id === 'large') setCaption('Large print format.');
+    else setCaption('Quiet format. Nothing will be spoken.');
+  }
+
+  /* ---------- Menu: ask and filters ---------- */
+
+  function parseAsk(text) {
+    var q = ' ' + text.toLowerCase() + ' ';
+    var out = { max: null, exclude: [], veg: false, words: [] };
+
+    var price = q.match(/(?:under|below|less than|cheaper than|up to|at most|max(?:imum)?)\s*\$?\s*(\d+(?:\.\d{1,2})?)/) ||
+      q.match(/\$\s*(\d+(?:\.\d{1,2})?)/) ||
+      q.match(/(\d+(?:\.\d{1,2})?)\s*(?:dollars|bucks)/);
+    if (price) out.max = parseFloat(price[1]);
+
+    var allSyn = [];
+    ALLERGENS.forEach(function (a) { allSyn = allSyn.concat(a.syn); });
+    var between = '(?:(?:any|or|and|nor|' + allSyn.join('|') + ')[\\s,]+)*';
+    var dropped = [];
+    ALLERGENS.forEach(function (a) {
+      var hit = a.syn.some(function (s) {
+        var negated = new RegExp('\\b(?:no|without|avoid|free of|free from|allergic to)\\s+' + between + s + '\\b');
+        var free = new RegExp('\\b' + s + '[- ]free\\b');
+        return negated.test(q) || free.test(q);
+      });
+      if (hit) { out.exclude.push(a.id); dropped = dropped.concat(a.syn.map(singular)); }
+    });
+
+    out.veg = /\b(vegetarian|veggie|meatless|no meat|without meat)\b/.test(q);
+
+    /* Keep the word as typed for the summary, and its base form for matching. */
+    out.shown = [];
+    q.replace(/[^a-z\s]/g, ' ').split(/\s+/).forEach(function (raw) {
+      var base = singular(raw);
+      if (!raw || STOP.indexOf(base) !== -1 || !vocab[base]) return;
+      if (dropped.indexOf(base) !== -1 || out.words.indexOf(base) !== -1) return;
+      out.words.push(base);
+      out.shown.push(raw);
+    });
+    return out;
+  }
+
+  function visibleItems() {
+    var f = state.filters;
+    return MENU.filter(function (item) {
+      if (f.cat !== 'all' && item.cat !== f.cat) return false;
+      if (f.max !== null && item.price > f.max) return false;
+      if (f.veg && !item.veg) return false;
+      if (f.exclude.some(function (a) { return item.has.indexOf(a) !== -1; })) return false;
+      return f.words.every(function (w) { return item.words.indexOf(w) !== -1; });
+    });
+  }
+
+  function filterSummary() {
+    var f = state.filters;
+    var parts = [];
+    if (f.words.length) parts.push('"' + (f.shown || f.words).join(' ') + '"');
+    if (f.cat !== 'all') parts.push(catById[f.cat].name.toLowerCase());
+    if (f.veg) parts.push('vegetarian');
+    if (f.max !== null) parts.push(usd(f.max) + ' or less');
+    if (f.exclude.length) parts.push('without ' + f.exclude.join(' or '));
+    return parts.join(', ');
+  }
+
+  function syncFilterControls() {
+    var f = state.filters;
+    $('fCat').value = f.cat;
+    $('fMax').value = f.max === null ? '' : f.max;
+    $('fVeg').checked = f.veg;
+    ALLERGENS.forEach(function (a) { $('fa-' + a.id).checked = f.exclude.indexOf(a.id) !== -1; });
+  }
+
+  function runAsk() {
+    var text = $('ask').value.trim();
+    if (!text) { setCaption('Type what you want first. Example: chicken under $6 with no milk.'); return; }
+    var parsed = parseAsk(text);
+    var understood = parsed.max !== null || parsed.exclude.length || parsed.veg || parsed.words.length;
+    if (!understood) {
+      tell('No food word, price, or allergen found in that. Example: chicken under $6 with no milk.');
+      return;
+    }
+    state.filters = { cat: 'all', max: parsed.max, exclude: parsed.exclude, veg: parsed.veg, words: parsed.words, shown: parsed.shown };
+    syncFilterControls();
+    renderList();
+
+    var found = visibleItems();
+    var answer;
+    if (!found.length) {
+      answer = 'Nothing matches. Try a higher price or fewer limits.';
+    } else if (found.length <= 4) {
+      answer = plural(found.length, 'item') + (found.length === 1 ? ' matches: ' : ' match: ') +
+        found.map(function (i) { return i.name + ', ' + usd(i.price); }).join('. ') + '.';
+    } else {
+      answer = plural(found.length, 'item') + ' match. Add a food word or a price to narrow it down.';
+    }
+    tell(answer);
+  }
+
+  function startVoice() {
+    if (!Recognition) return;
+    try {
+      stopSpeaking();
+      var rec = new Recognition();
+      rec.lang = 'en-US';
+      rec.onresult = function (event) {
+        $('ask').value = event.results[0][0].transcript;
+        runAsk();
+      };
+      rec.onerror = function () { setCaption('Voice input did not work here. Type your question instead.'); };
+      rec.start();
+      setCaption('Listening. Say what you want.');
+    } catch (e) {
+      setCaption('Voice input did not work here. Type your question instead.');
+    }
+  }
+
+  function buildFilters() {
+    var select = $('fCat');
+    select.append(el('option', { value: 'all', text: 'All food' }));
+    CATS.forEach(function (c) { select.append(el('option', { value: c.id, text: c.name })); });
+
+    var box = $('fAllergens');
+    ALLERGENS.forEach(function (a) {
+      box.append(el('div', { class: 'check' },
+        el('input', { type: 'checkbox', id: 'fa-' + a.id, 'data-allergen': a.id }),
+        el('label', { for: 'fa-' + a.id, text: a.label })
+      ));
+    });
+  }
+
+  function readFilterControls() {
+    var max = parseFloat($('fMax').value);
+    state.filters.cat = $('fCat').value;
+    state.filters.max = isNaN(max) ? null : max;
+    state.filters.veg = $('fVeg').checked;
+    state.filters.exclude = ALLERGENS.filter(function (a) { return $('fa-' + a.id).checked; })
+      .map(function (a) { return a.id; });
+    renderList();
+    setCaption('Showing ' + plural(visibleItems().length, 'item') + '.');
+  }
+
+  function clearFilters() {
+    state.filters = { cat: 'all', max: null, exclude: [], veg: false, words: [] };
+    $('ask').value = '';
+    syncFilterControls();
+    renderList();
+    setCaption('Filters cleared. Showing all ' + MENU.length + ' items.');
+  }
+
+  /* ---------- Menu: list ---------- */
+
+  function renderMenu() {
+    if (state.format === 'pictures') renderWizard(false);
+    else renderList();
+  }
+
+  function renderList() {
+    var found = visibleItems();
+    var summary = filterSummary();
+    $('count').textContent = 'Showing ' + found.length + ' of ' + MENU.length + ' items' +
+      (summary ? ': ' + summary : '') + '.';
+
+    var list = $('list');
+    list.replaceChildren();
+    if (!found.length) {
+      list.append(el('p', { class: 'empty', text: 'Nothing matches. Try a higher price or fewer limits, or clear the filters.' }));
+      return;
+    }
+
+    CATS.forEach(function (cat) {
+      var items = found.filter(function (i) { return i.cat === cat.id; });
+      if (!items.length) return;
+      var ul = el('ul');
+      items.forEach(function (item) {
+        ul.append(el('li', { class: 'item' },
+          el('span', { class: 'pic', 'aria-hidden': 'true', text: item.pic }),
+          el('div', null,
+            el('div', { class: 'item-head' },
+              el('h4', { text: item.name }),
+              el('p', { class: 'price', text: usd(item.price) })
+            ),
+            el('p', { class: 'desc', text: item.desc }),
+            el('p', { text: hasText(item) }),
+            el('div', { class: 'item-actions' },
+              el('button', { type: 'button', class: 'btn', 'data-add': item.id, 'aria-label': 'Add to order: ' + item.name, text: 'Add to order' }),
+              (state.format === 'listen' && canSpeak) ?
+                el('button', { type: 'button', class: 'btn-quiet', 'data-listen': item.id, 'aria-label': 'Listen: ' + item.name, text: 'Listen' }) : null
+            )
+          )
+        ));
+      });
+      list.append(el('section', { class: 'group' }, el('h3', { text: cat.name }), ul));
+    });
+  }
+
+  function addToOrder(id) {
+    var line = state.order.filter(function (l) { return l.id === id; })[0];
+    if (line) line.qty += 1;
+    else state.order.push({ id: id, qty: 1 });
+  }
+
+  /* ---------- Menu: pictures, one step at a time ---------- */
+
+  function renderWizard(moveFocus) {
+    var box = $('wizard');
+    var wiz = state.wiz;
+    box.replaceChildren();
+    var heading;
+
+    if (wiz.step === 'cat') {
+      heading = el('h3', { class: 'wiz-q', tabindex: '-1', text: 'What would you like?' });
+      var cats = el('div', { class: 'tiles' });
+      CATS.forEach(function (c) {
+        cats.append(el('button', { type: 'button', class: 'tile', 'data-wcat': c.id },
+          el('span', { class: 'pic', 'aria-hidden': 'true', text: c.pic }),
+          el('span', { class: 'tile-name', text: c.name })
+        ));
+      });
+      box.append(heading, cats);
+      if (state.order.length) {
+        box.append(
+          el('p', { class: 'wiz-order', text: 'In your order: ' + plural(orderCount(), 'thing') + '.' }),
+          el('div', { class: 'wiz-actions' }, el('button', { type: 'button', class: 'btn', 'data-act': 'toCard', text: 'I am done' }))
+        );
+      }
+    } else if (wiz.step === 'item') {
+      heading = el('h3', { class: 'wiz-q', tabindex: '-1', text: 'Pick one: ' + catById[wiz.cat].name });
+      var tiles = el('div', { class: 'tiles' });
+      MENU.filter(function (i) { return i.cat === wiz.cat; }).forEach(function (item) {
+        tiles.append(el('button', { type: 'button', class: 'tile', 'data-witem': item.id },
+          el('span', { class: 'pic', 'aria-hidden': 'true', text: item.pic }),
+          el('span', { class: 'tile-name', text: item.name }),
+          el('span', { class: 'price', text: usd(item.price) }),
+          el('span', { class: 'tile-has', text: item.has.length ? 'Has ' + item.has.join(', ') : 'No listed allergens' })
+        ));
+      });
+      box.append(heading, tiles,
+        el('p', { class: 'notice', text: 'Allergen details are sample data. Always confirm with staff.' }),
+        el('div', { class: 'wiz-actions' }, el('button', { type: 'button', class: 'btn-quiet', 'data-act': 'wizBack', text: 'Go back' }))
+      );
+    } else {
+      heading = el('h3', { class: 'wiz-q', tabindex: '-1', text: 'Added: ' + byId[wiz.last].name });
+      box.append(heading,
+        el('p', { class: 'wiz-order', text: 'Do you want something else?' }),
+        el('div', { class: 'wiz-actions' },
+          el('button', { type: 'button', class: 'btn', 'data-act': 'wizMore', text: 'Yes, more food' }),
+          el('button', { type: 'button', class: 'btn-quiet', 'data-act': 'toCard', text: 'No, I am done' })
+        )
+      );
+    }
+    if (moveFocus) heading.focus();
+  }
+
+  /* ---------- Order card ---------- */
+
+  function orderLines() {
+    return state.order.map(function (l) { return l.qty + ' ' + byId[l.id].name; });
+  }
+
+  function orderText() {
+    return 'My order. ' + orderLines().join('. ') + '. ' +
+      (state.note ? 'Please note: ' + state.note + '. ' : '') +
+      'Total ' + usd(orderTotal()) + '.';
+  }
+
+  function renderCard() {
+    var box = $('card');
+    box.replaceChildren();
+    if (!state.order.length) {
+      box.append(
+        el('p', { class: 'empty', text: 'Your order is empty. Add an item from the menu.' }),
+        el('div', { class: 'wiz-actions' }, el('button', { type: 'button', class: 'btn', 'data-act': 'toMenu', text: 'Go to the menu' }))
+      );
+      return;
+    }
+
+    var lines = el('ul');
+    state.order.forEach(function (l) {
+      var item = byId[l.id];
+      lines.append(el('li', { class: 'line' },
+        el('span', { class: 'line-name' }, el('strong', { text: l.qty + ' ' }), item.name),
+        el('span', { class: 'price', text: usd(item.price * l.qty) }),
+        el('span', { class: 'qty' },
+          el('button', { type: 'button', class: 'btn-quiet', 'data-qty': '-1', 'data-id': l.id, 'aria-label': 'One less: ' + item.name, text: '−' }),
+          el('button', { type: 'button', class: 'btn-quiet', 'data-qty': '1', 'data-id': l.id, 'aria-label': 'One more: ' + item.name, text: '+' }),
+          el('button', { type: 'button', class: 'btn-quiet', 'data-qty': '0', 'data-id': l.id, 'aria-label': 'Remove: ' + item.name, text: 'Remove' })
+        )
+      ));
+    });
+
+    var note = el('input', { type: 'text', id: 'note', autocomplete: 'off', 'aria-describedby': 'noteHint' });
+    note.value = state.note;
+
+    box.append(el('div', { class: 'ticket' },
+      lines,
+      el('p', { class: 'total' }, el('span', { text: 'Total ' }), el('span', { text: usd(orderTotal()) })),
+      el('div', { class: 'note-field' },
+        el('label', { for: 'note', text: 'Anything to change?' }),
+        el('p', { id: 'noteHint', text: 'Example: no pickles' }),
+        note
+      ),
+      el('div', { class: 'ticket-actions' },
+        el('button', { type: 'button', class: 'btn', 'data-act': 'toCrew', text: 'Show to the crew' }),
+        (canSpeak && state.format !== 'quiet') ?
+          el('button', { type: 'button', class: 'btn-quiet', 'data-act': 'playOrder', text: 'Play my order aloud' }) : null,
+        el('button', { type: 'button', class: 'btn-quiet', 'data-act': 'toMenu', text: 'Add more food' })
+      )
+    ));
+  }
+
+  function changeQty(id, change) {
+    var index = -1;
+    state.order.forEach(function (l, i) { if (l.id === id) index = i; });
+    if (index === -1) return;
+    var line = state.order[index];
+    var name = byId[id].name;
+    if (change === 0 || line.qty + change <= 0) {
+      state.order.splice(index, 1);
+      renderCard();
+      $('h-card').focus();
+      setCaption('Removed ' + name + '. Total ' + usd(orderTotal()) + '.');
+      return;
+    }
+    line.qty += change;
+    renderCard();
+    var again = document.querySelector('[data-qty="' + change + '"][data-id="' + id + '"]');
+    if (again) again.focus();
+    setCaption(line.qty + ' ' + name + '. Total ' + usd(orderTotal()) + '.');
+  }
+
+  /* ---------- Crew view ---------- */
+
+  var REPLIES = ['Yes', 'No', 'Please write it down', 'Thank you'];
+
+  function renderCrew() {
+    var box = $('crew');
+    box.replaceChildren();
+
+    var lines = el('ul');
+    orderLines().forEach(function (text) {
+      lines.append(el('li', { class: 'line' }, el('span', { class: 'line-name', text: text })));
+    });
+
+    var replies = el('div', { class: 'replies' });
+    REPLIES.forEach(function (text) {
+      replies.append(el('button', { type: 'button', class: 'btn-quiet', 'data-reply': text, text: text }));
+    });
+
+    box.append(el('div', { class: 'ticket crew' },
+      el('p', { class: 'hello', text: 'Hello. This is my order.' }),
+      state.format === 'quiet' ?
+        el('p', { class: 'quiet-line', text: 'I am ordering without speaking. Please point, write, or type your reply.' }) : null,
+      lines,
+      state.note ? el('p', { class: 'crew-note' }, el('strong', { text: 'Please note: ' }), state.note) : null,
+      el('p', { class: 'total' }, el('span', { text: 'Total ' }), el('span', { text: usd(orderTotal()) })),
+
+      el('h3', { text: 'Quick replies' }),
+      replies,
+      el('p', { class: 'big-say', id: 'bigSay' }),
+
+      el('h3', null, el('label', { for: 'crewReply', text: 'Crew: type your reply here' })),
+      el('textarea', { id: 'crewReply', rows: '2' }),
+
+      el('div', { class: 'ticket-actions' },
+        (canSpeak && state.format !== 'quiet') ?
+          el('button', { type: 'button', class: 'btn', 'data-act': 'playOrder', text: 'Play my order aloud' }) : null,
+        el('button', { type: 'button', class: 'btn-quiet', 'data-act': 'toCard', text: 'Back to my order' }),
+        el('button', { type: 'button', class: 'btn-quiet', 'data-act': 'newOrder', text: 'Start a new order' })
+      )
+    ));
+  }
+
+  /* ================= Events ================= */
+
+  function onClick(event) {
+    var target = event.target.closest('button');
+    if (!target) return;
+    var data = target.dataset;
+
+    if (data.format) { setFormat(data.format, false); return; }
+
+    if (data.add) {
+      addToOrder(data.add);
+      renderBar();
+      tell('Added ' + byId[data.add].name + '. ' + plural(orderCount(), 'item') + ' in your order. Total ' + usd(orderTotal()) + '.');
+      return;
+    }
+
+    if (data.listen) {
+      var item = byId[data.listen];
+      tell(item.name + '. ' + usd(item.price) + '. ' + item.desc + ' ' + hasText(item), true);
+      return;
+    }
+
+    if (data.wcat) { state.wiz.step = 'item'; state.wiz.cat = data.wcat; renderWizard(true); return; }
+
+    if (data.witem) {
+      addToOrder(data.witem);
+      state.wiz.step = 'more';
+      state.wiz.last = data.witem;
+      renderWizard(true);
+      setCaption('Added ' + byId[data.witem].name + '.');
+      return;
+    }
+
+    if (data.qty !== undefined) { changeQty(data.id, parseInt(data.qty, 10)); return; }
+
+    if (data.reply) {
+      $('bigSay').textContent = data.reply;
+      tell(data.reply, true);
+      return;
+    }
+
+    switch (data.act) {
+      case 'wizBack':
+      case 'wizMore':
+        state.wiz.step = 'cat'; renderWizard(true); break;
+      case 'toMenu':
+        state.wiz.step = 'cat'; setView('menu'); break;
+      case 'toCard':
+        stopSpeaking(); setView('card'); break;
+      case 'toCrew':
+        setView('crew'); break;
+      case 'playOrder':
+        tell(orderText(), true); break;
+      case 'newOrder':
+        stopSpeaking();
+        state.order = [];
+        state.note = '';
+        state.wiz = { step: 'cat', cat: null, last: null };
+        setView('menu');
+        setCaption('New order started.');
+        break;
+    }
+  }
+
+  function init() {
+    buildStart();
+    buildFilters();
+
+    document.addEventListener('click', onClick);
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && state.speaking) stopSpeaking();
+    });
+    document.addEventListener('input', function (event) {
+      if (event.target.id === 'note') state.note = event.target.value.trim();
+    });
+
+    $('askForm').addEventListener('submit', function (event) { event.preventDefault(); runAsk(); });
+    $('voiceBtn').addEventListener('click', startVoice);
+    $('clearBtn').addEventListener('click', clearFilters);
+    $('filters').addEventListener('change', readFilterControls);
+    $('stopBtn').addEventListener('click', stopSpeaking);
+    $('reviewBtn').addEventListener('click', function () { stopSpeaking(); setView('card'); });
+    $('changeFormat').addEventListener('click', function () {
+      stopSpeaking();
+      setView('start');
+      setCaption('');
+    });
+
+    var saved = null;
+    try { saved = window.localStorage.getItem('comfortmenu.format'); } catch (e) { saved = null; }
+    if (saved && FORMATS.some(function (f) { return f.id === saved; })) setFormat(saved, true);
+    else renderBar();
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
