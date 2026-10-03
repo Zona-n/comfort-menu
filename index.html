@@ -119,6 +119,7 @@ h3 { font-size: 1.25rem; line-height: 1.25; }
 h4 { font-size: 1rem; line-height: 1.3; }
 h2:focus, h3:focus { outline: none; }
 :focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+img { max-width: 100%; }
 
 .wrap { width: 100%; max-width: 46rem; margin-inline: auto; padding-inline: 1rem; }
 main { flex: 1; padding-block: 1.5rem 2.5rem; }
@@ -145,7 +146,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .btn-quiet { background: transparent; color: var(--ink); border: var(--edge) solid var(--ink); }
 .btn:hover, .btn-quiet:hover { text-decoration: underline; text-underline-offset: 0.2em; }
 label, legend { font-weight: 700; display: block; }
-input[type="text"], input[type="number"], select, textarea {
+input[type="text"], input[type="number"], input[type="password"], input[type="file"], select, textarea {
   width: 100%;
   min-height: 2.75rem;
   padding: 0.5rem 0.75rem;
@@ -158,17 +159,21 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
 .check { display: flex; align-items: center; gap: 0.6rem; min-height: 2.75rem; }
 .check label { font-weight: 400; }
 .hint, .lead, .sub { color: var(--ink-soft); }
+.field { margin-top: 1.25rem; }
+.actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem; }
+.notice { margin-top: 1rem; padding: 0.6rem 0.9rem; background: var(--tint); border-left: 0.4rem solid var(--primary); }
 
 /* ---------- Header ---------- */
 .top { border-bottom: var(--edge) solid var(--ink); background: var(--surface); }
-.top-in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; padding-block: 0.75rem; }
+.top-in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.6rem 1rem; padding-block: 0.75rem; }
 .sub { font-size: 0.889rem; }
-.format-now { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+.nav { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.nav .btn-quiet { font-size: 0.889rem; padding-inline: 0.8rem; }
 
-/* ---------- Start: choose a format ---------- */
-.lead { margin-top: 0.5rem; max-width: 34rem; }
+/* ---------- Big choice buttons (format, home) ---------- */
+.lead { margin-top: 0.5rem; max-width: 36rem; }
 .choices { display: grid; gap: 0.75rem; margin-top: 1.5rem; }
-@media (min-width: 36rem) { .choices { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 36rem) { .choices.two { grid-template-columns: 1fr 1fr; } }
 .choice {
   display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 0.9rem; align-items: center;
   text-align: left;
@@ -182,20 +187,31 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
 .choice .pic { grid-row: span 2; font-size: 2.441rem; line-height: 1; }
 .choice-name { font-size: 1.25rem; font-weight: 700; }
 .choice-desc { color: var(--ink-soft); }
+.section-title { margin-top: 2rem; }
 
-/* ---------- Menu: ask and filters ---------- */
+/* ---------- Food needs ---------- */
+.needs fieldset { margin-top: 1.75rem; }
+.needs legend { font-size: 1.25rem; padding-bottom: 0.3rem; }
+.checks { display: grid; grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); gap: 0 1.25rem; }
+
+/* ---------- Menu: ask, answer, filters ---------- */
 .ask { margin-top: 1.25rem; }
 .ask-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.4rem; }
 .ask-row input { flex: 1 1 14rem; }
-.filters { margin-top: 1rem; border: var(--edge) solid var(--line); border-radius: 0.5rem; background: var(--surface); }
-.filters summary { padding: 0.65rem 1rem; font-weight: 700; cursor: pointer; min-height: 2.75rem; }
-.filters-in { padding: 0.25rem 1rem 1rem; display: grid; gap: 1rem; }
-@media (min-width: 36rem) { .filter-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; } }
-.filter-pair > div + div { margin-top: 1rem; }
-@media (min-width: 36rem) { .filter-pair > div + div { margin-top: 0; } }
-.checks { display: flex; flex-wrap: wrap; gap: 0 1.5rem; }
-.notice { margin-top: 1rem; padding: 0.6rem 0.9rem; background: var(--tint); border-left: 0.4rem solid var(--primary); }
+.answer { margin-top: 0.75rem; padding: 0.75rem 1rem; background: var(--surface); border: var(--edge) solid var(--ink); border-radius: 0.5rem; }
+.box { margin-top: 1rem; border: var(--edge) solid var(--line); border-radius: 0.5rem; background: var(--surface); }
+.box > summary { padding: 0.65rem 1rem; font-weight: 700; cursor: pointer; min-height: 2.75rem; }
+.box-in { padding: 0.25rem 1rem 1rem; }
+.filter-pair { display: grid; gap: 1rem; }
+@media (min-width: 36rem) { .filter-pair { grid-template-columns: 1fr 1fr; } }
 .count { margin-top: 1rem; font-weight: 700; }
+
+/* ---------- Menu: the original, as printed ---------- */
+.paper { background: #FFFDF5; color: #2A2118; border: 1px solid #2A2118; padding: 1.25rem 1.25rem 1.5rem; font-family: Georgia, "Times New Roman", serif; }
+.paper-title { text-align: center; font-size: 1.563rem; font-style: italic; }
+.paper-cat { margin-top: 1rem; text-align: center; font-variant: small-caps; letter-spacing: 0.08em; border-bottom: 1px solid #2A2118; }
+.paper li { display: flex; justify-content: space-between; gap: 1rem; padding-top: 0.35rem; }
+.preview { display: block; margin-top: 1rem; border: var(--edge) solid var(--ink); border-radius: 0.5rem; }
 
 /* ---------- Menu: list ---------- */
 .group { margin-top: 1.75rem; }
@@ -204,9 +220,15 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
 .item .pic { font-size: 1.953rem; line-height: 1.1; }
 .item-head { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
 .price { font-weight: 700; white-space: nowrap; }
+.original { font-style: italic; color: var(--ink-soft); }
 .desc { color: var(--ink-soft); }
+.reasons { margin-top: 0.35rem; padding-left: 0.6rem; border-left: 0.3rem solid var(--ink); font-weight: 700; }
+.feel { margin-top: 0.35rem; }
+.feel summary { cursor: pointer; font-weight: 700; min-height: 2rem; text-decoration: underline; text-underline-offset: 0.2em; }
+.feel-list { padding: 0.25rem 0 0.25rem 0.9rem; border-left: 0.3rem solid var(--tint); }
 .item-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; }
 .empty { margin-top: 1.5rem; padding: 1rem; border: var(--edge) dashed var(--line); border-radius: 0.5rem; }
+.other { margin-top: 2rem; }
 
 /* ---------- Menu: pictures, one step at a time ---------- */
 .wiz-q { margin-top: 1rem; font-size: 1.563rem; }
@@ -219,7 +241,10 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
 .tile:hover { background: var(--tint); }
 .tile .pic { font-size: 3.4rem; line-height: 1; }
 .tile-name { font-weight: 700; font-size: 1.125rem; line-height: 1.2; }
-.tile-has { font-size: 0.889rem; color: var(--ink-soft); }
+.tile-warn { font-size: 0.889rem; font-weight: 700; }
+.detail { margin-top: 1rem; padding: 1.25rem; background: var(--surface); border: 3px solid var(--ink); border-radius: 1rem; }
+.detail .pic { font-size: 4rem; line-height: 1; }
+.detail p { margin-top: 0.4rem; }
 .wiz-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.25rem; }
 .wiz-actions .btn, .wiz-actions .btn-quiet { min-height: 3.5rem; font-size: 1.125rem; padding-inline: 1.5rem; }
 .wiz-order { margin-top: 1.25rem; font-weight: 700; }
@@ -241,13 +266,14 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
 }
 .line { display: grid; grid-template-columns: 1fr auto; gap: 0.4rem 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--ticket-ink); }
 .line-name { font-size: 1.125rem; }
+.line-sub { display: block; font-size: 0.889rem; }
 .qty { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .qty .btn-quiet { min-width: 2.75rem; padding-inline: 0.8rem; }
 .total { display: flex; justify-content: space-between; gap: 1rem; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 3px dashed var(--ticket-ink); font-size: 1.25rem; font-weight: 700; }
-.note-field { margin-top: 1.25rem; }
 .ticket-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.25rem; }
 
 .crew .hello { font-size: 1.563rem; font-weight: 700; line-height: 1.2; }
+.crew .gloss { font-size: 0.889rem; font-weight: 400; display: block; }
 .crew .quiet-line { margin-top: 0.5rem; font-size: 1.125rem; }
 .crew .line { grid-template-columns: 1fr; }
 .crew .line-name { font-size: clamp(1.5rem, 5.5vw, 2.441rem); line-height: 1.2; }
@@ -280,12 +306,13 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
   <div class="wrap top-in">
     <div>
       <h1>Comfort Menu</h1>
-      <p class="sub">Sample menu from Corner Grill</p>
+      <p class="sub" id="sub">Any menu, in your format, at your pace</p>
     </div>
-    <div class="format-now" id="formatNow" hidden>
-      <p>Format: <strong id="formatLabel"></strong></p>
-      <button type="button" class="btn-quiet" id="changeFormat">Change format</button>
-    </div>
+    <nav class="nav" id="nav" aria-label="Settings" hidden>
+      <button type="button" class="btn-quiet" id="changeFormat">Change format (<span id="formatLabel"></span>)</button>
+      <button type="button" class="btn-quiet" id="editNeeds">My food needs</button>
+      <button type="button" class="btn-quiet" id="chooseMenu">Choose a menu</button>
+    </nav>
   </div>
 </header>
 
@@ -294,51 +321,117 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
   <section id="view-start" aria-labelledby="h-start">
     <h2 id="h-start" tabindex="-1">How do you want this menu?</h2>
     <p class="lead">Pick one. You can change it at any time. Your choice is saved for next time.</p>
-    <div class="choices" id="choices"></div>
+    <div class="choices two" id="formatChoices"></div>
+  </section>
+
+  <section id="view-needs" class="needs" aria-labelledby="h-needs" hidden>
+    <h2 id="h-needs" tabindex="-1">My food needs</h2>
+    <p class="lead">Tell us once. Every menu you open will show what fits you first, and say why other dishes do not fit.</p>
+    <div id="needsForm"></div>
+    <p class="notice" id="needsDisclaimer"></p>
+    <div class="actions">
+      <button type="button" class="btn" data-act="needsDone">Save and continue</button>
+      <button type="button" class="btn-quiet" data-act="needsClear">Clear all</button>
+    </div>
+  </section>
+
+  <section id="view-home" aria-labelledby="h-home" hidden>
+    <h2 id="h-home" tabindex="-1">Choose a menu</h2>
+    <div class="choices">
+      <button type="button" class="choice" data-act="toScan">
+        <span class="pic" aria-hidden="true">📷</span>
+        <span class="choice-name">Scan a menu</span>
+        <span class="choice-desc">Take a photo of a menu in any language. It is read, translated, and explained.</span>
+      </button>
+    </div>
+    <h3 class="section-title">Sample restaurants</h3>
+    <div class="choices" id="sampleChoices"></div>
+  </section>
+
+  <section id="view-scan" aria-labelledby="h-scan" hidden>
+    <h2 id="h-scan" tabindex="-1">Scan a menu</h2>
+    <p class="lead">Take or choose a photo of a menu in any language. Comfort Menu reads it, translates it to English, and explains each dish in plain words.</p>
+    <p class="notice" id="scanNeedKey" hidden>Reading a photo uses AI and needs a key. Add a key below, or go back and try the sample French menu.</p>
+    <div class="field">
+      <label for="scanFile">Photo of the menu</label>
+      <input type="file" id="scanFile" accept="image/*">
+    </div>
+    <p class="count" id="scanStatus"></p>
+    <img class="preview" id="scanPreview" alt="Your photo of the menu" hidden>
+    <details class="box" id="keyBox">
+      <summary>AI key settings</summary>
+      <div class="box-in">
+        <label for="keyInput">Anthropic API key</label>
+        <p class="hint" id="keyHint">Saved only in this browser. Sent only to Anthropic when you scan a menu or ask a question. Never put a key in code or on GitHub.</p>
+        <input type="password" id="keyInput" autocomplete="off" aria-describedby="keyHint">
+        <div class="field">
+          <label for="modelSel">Reading speed</label>
+          <select id="modelSel">
+            <option value="claude-haiku-4-5-20251001">Faster</option>
+            <option value="claude-sonnet-5-5">More careful</option>
+          </select>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn" data-act="saveKey">Save key</button>
+          <button type="button" class="btn-quiet" data-act="removeKey">Remove key</button>
+        </div>
+      </div>
+    </details>
+    <p class="notice" id="scanDisclaimer"></p>
+    <div class="actions">
+      <button type="button" class="btn-quiet" data-act="toHome">Go back</button>
+    </div>
   </section>
 
   <section id="view-menu" aria-labelledby="h-menu" hidden>
     <h2 id="h-menu" tabindex="-1">Menu</h2>
+    <p class="notice" id="menuNotice"></p>
+    <details class="box" id="originalBox" hidden>
+      <summary id="originalSummary"></summary>
+      <div class="box-in" id="originalBody"></div>
+    </details>
 
     <div id="listUI">
       <form id="askForm" class="ask">
         <label for="ask">Ask the menu</label>
-        <p id="askHint" class="hint">Example: chicken under $6 with no milk</p>
+        <p id="askHint" class="hint"></p>
         <div class="ask-row">
           <input id="ask" type="text" autocomplete="off" aria-describedby="askHint">
           <button class="btn" type="submit">Find</button>
           <button class="btn-quiet" type="button" id="voiceBtn" hidden>Ask by voice</button>
         </div>
       </form>
+      <p class="answer" id="answer" hidden></p>
 
-      <details class="filters" id="filters">
-        <summary>Filters</summary>
-        <div class="filters-in">
+      <details class="box" id="filters">
+        <summary>Sort and filter</summary>
+        <div class="box-in">
           <div class="filter-pair">
             <div>
               <label for="fCat">Kind of food</label>
               <select id="fCat"></select>
             </div>
             <div>
-              <label for="fMax">Most I want to pay, in dollars</label>
-              <input id="fMax" type="number" min="1" max="20" step="1" inputmode="decimal">
+              <label for="fSort">Order</label>
+              <select id="fSort">
+                <option value="menu">Menu order</option>
+                <option value="price">Lowest price first</option>
+              </select>
             </div>
           </div>
-          <fieldset>
-            <legend>Leave out food that contains</legend>
-            <div class="checks" id="fAllergens"></div>
-          </fieldset>
-          <div class="check">
-            <input type="checkbox" id="fVeg">
-            <label for="fVeg">Vegetarian only</label>
+          <div class="actions">
+            <button type="button" class="btn-quiet" data-act="clearFind">Clear search</button>
+            <button type="button" class="btn-quiet" data-act="toNeeds">Edit my food needs</button>
           </div>
-          <div><button type="button" class="btn-quiet" id="clearBtn">Clear filters</button></div>
         </div>
       </details>
 
-      <p class="notice">Allergen details are sample data. Always confirm with staff.</p>
       <p class="count" id="count"></p>
       <div id="list"></div>
+      <details class="box other" id="otherBox" hidden>
+        <summary id="otherSummary"></summary>
+        <div class="box-in"><ul id="otherList"></ul></div>
+      </details>
     </div>
 
     <div id="wizard" hidden></div>
@@ -368,7 +461,11 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
 (function () {
   'use strict';
 
-  /* ================= Data ================= */
+  /* ================= Fixed text and options ================= */
+
+  var DISCLAIMER = 'Comfort Menu is a guide, not medical advice. Ingredient and allergen details can be wrong or incomplete. If you have an allergy or a medical diet, always confirm with restaurant staff before you order.';
+  var SAMPLE_NOTICE = 'Sample menu. Allergen and texture details are sample data, not medical advice. Always confirm with restaurant staff before you order.';
+  var AI_NOTICE = 'This menu was read from a photo by AI. Names, prices, allergens, and texture notes are estimates and can be wrong. This is not medical advice. Always confirm with restaurant staff before you order.';
 
   var FORMATS = [
     { id: 'listen',   name: 'Listen',      pic: '🔊', desc: 'The page reads the menu and your order out loud.' },
@@ -377,45 +474,109 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
     { id: 'quiet',    name: 'Quiet',       pic: '📝', desc: 'No sound. Show your order on the screen instead of saying it.' }
   ];
 
-  var CATS = [
-    { id: 'burgers',   name: 'Burgers and sandwiches', pic: '🍔', words: [] },
-    { id: 'chicken',   name: 'Chicken',                pic: '🍗', words: [] },
-    { id: 'sides',     name: 'Sides',                  pic: '🍟', words: ['side', 'snack'] },
-    { id: 'breakfast', name: 'Breakfast',              pic: '🍳', words: ['breakfast', 'morning'] },
-    { id: 'drinks',    name: 'Drinks',                 pic: '🥤', words: ['drink', 'beverage', 'thirsty'] },
-    { id: 'desserts',  name: 'Desserts',               pic: '🍦', words: ['dessert', 'sweet'] }
+  /* Things a person can ask to avoid. type "has" = allergen, type "feel" = texture, taste, or smell. */
+  var AVOID = [
+    { id: 'milk',      type: 'has',  label: 'Milk',            short: 'milk',      syn: ['milk', 'dairy', 'cheese', 'lactose', 'butter', 'cream'] },
+    { id: 'egg',       type: 'has',  label: 'Egg',             short: 'egg',       syn: ['eggs', 'egg'] },
+    { id: 'wheat',     type: 'has',  label: 'Wheat or gluten', short: 'wheat',     syn: ['wheat', 'gluten'] },
+    { id: 'soy',       type: 'has',  label: 'Soy',             short: 'soy',       syn: ['soy', 'soya'] },
+    { id: 'fish',      type: 'has',  label: 'Fish',            short: 'fish',      syn: ['fish'] },
+    { id: 'shellfish', type: 'has',  label: 'Shellfish',       short: 'shellfish', syn: ['shellfish', 'shrimp', 'crab', 'lobster', 'mussels', 'mussel'] },
+    { id: 'peanut',    type: 'has',  label: 'Peanuts',         short: 'peanuts',   syn: ['peanuts', 'peanut', 'nuts', 'nut'] },
+    { id: 'treenut',   type: 'has',  label: 'Tree nuts',       short: 'tree nuts', syn: ['tree nuts', 'nuts', 'nut', 'almonds', 'almond', 'walnuts', 'walnut', 'pecans', 'pecan', 'cashews', 'cashew', 'hazelnuts', 'hazelnut', 'pistachios', 'pistachio'] },
+    { id: 'sesame',    type: 'has',  label: 'Sesame',          short: 'sesame',    syn: ['sesame'] },
+    { id: 'crunchy',     type: 'feel', label: 'Crunchy',              short: 'crunchy',              syn: ['crunchy', 'crispy', 'crisp'] },
+    { id: 'chewy',       type: 'feel', label: 'Chewy',                short: 'chewy',                syn: ['chewy'] },
+    { id: 'mushy',       type: 'feel', label: 'Mushy',                short: 'mushy',                syn: ['mushy', 'soggy'] },
+    { id: 'jelly',       type: 'feel', label: 'Jelly-like or slimy',  short: 'jelly-like or slimy',  syn: ['jelly', 'slimy', 'slippery', 'gooey'] },
+    { id: 'spicy',       type: 'feel', label: 'Spicy',                short: 'spicy',                syn: ['spicy'] },
+    { id: 'sour',        type: 'feel', label: 'Sour or acidic',       short: 'sour',                 syn: ['sour', 'acidic', 'tangy', 'tart'] },
+    { id: 'strongsmell', type: 'feel', label: 'Strong smell',         short: 'strong smell',         syn: ['strong smells', 'strong smell', 'smelly'] },
+    { id: 'mixed',       type: 'feel', label: 'Foods mixed together', short: 'foods mixed together', syn: ['mixed'] }
   ];
+  var avoidById = {};
+  AVOID.forEach(function (a) { avoidById[a.id] = a; });
 
-  var ALLERGENS = [
-    { id: 'milk',  label: 'Milk',  syn: ['milk', 'dairy', 'cheese', 'lactose'] },
-    { id: 'egg',   label: 'Egg',   syn: ['eggs', 'egg'] },
-    { id: 'wheat', label: 'Wheat', syn: ['wheat', 'gluten'] },
-    { id: 'soy',   label: 'Soy',   syn: ['soy', 'soya'] },
-    { id: 'fish',  label: 'Fish',  syn: ['fish'] }
-  ];
+  var CREW_EN = {
+    hello: 'Hello. This is my order.',
+    quiet: 'I am ordering without speaking. Please point, write, or type your reply.',
+    note: 'Please note', total: 'Total',
+    yes: 'Yes', no: 'No', write: 'Please write it down', thanks: 'Thank you',
+    reply: 'Crew: type your reply here'
+  };
+  var REPLY_KEYS = ['yes', 'no', 'write', 'thanks'];
 
-  /* Sample data only. Replace with the restaurant's official menu and allergen data. */
-  var MENU = [
-    { id: 'cheeseburger', cat: 'burgers', pic: '🍔', name: 'Classic cheeseburger', price: 5.49, desc: 'Beef patty, cheese, pickles, and a bun.', has: ['milk', 'wheat', 'soy'], veg: false, extra: ['burger', 'beef'] },
-    { id: 'hamburger', cat: 'burgers', pic: '🍔', name: 'Plain hamburger', price: 4.29, desc: 'Beef patty and a bun. Nothing else.', has: ['wheat', 'soy'], veg: false, extra: ['burger', 'beef'] },
-    { id: 'crispy', cat: 'burgers', pic: '🥪', name: 'Crispy chicken sandwich', price: 6.29, desc: 'Fried chicken, lettuce, and mayo on a bun.', has: ['wheat', 'egg', 'soy'], veg: false, extra: [] },
-    { id: 'wrap', cat: 'burgers', pic: '🌯', name: 'Grilled chicken wrap', price: 5.79, desc: 'Grilled chicken, lettuce, and tomato in a soft wrap.', has: ['wheat'], veg: false, extra: [] },
-    { id: 'veggie', cat: 'burgers', pic: '🌱', name: 'Veggie burger', price: 5.99, desc: 'Bean and vegetable patty, lettuce, and a bun.', has: ['wheat', 'soy'], veg: true, extra: ['burger'] },
-    { id: 'fish', cat: 'burgers', pic: '🐟', name: 'Fish sandwich', price: 5.69, desc: 'Fried fish, cheese, and tartar sauce on a bun.', has: ['fish', 'wheat', 'egg', 'milk'], veg: false, extra: [] },
-    { id: 'bites', cat: 'chicken', pic: '🍗', name: 'Chicken bites, 6 pieces', price: 4.99, desc: 'Small pieces of fried chicken.', has: ['wheat'], veg: false, extra: ['nugget'] },
-    { id: 'strips', cat: 'chicken', pic: '🍗', name: 'Chicken strips, 3 pieces', price: 5.29, desc: 'Long pieces of fried chicken.', has: ['wheat', 'egg'], veg: false, extra: ['tender'] },
-    { id: 'fries', cat: 'sides', pic: '🍟', name: 'Fries, medium', price: 2.99, desc: 'Salted potato fries.', has: [], veg: true, extra: ['potato'] },
-    { id: 'salad', cat: 'sides', pic: '🥗', name: 'Side salad', price: 3.49, desc: 'Lettuce, tomato, and cucumber.', has: [], veg: true, extra: [] },
-    { id: 'apple', cat: 'sides', pic: '🍎', name: 'Apple slices', price: 1.49, desc: 'Fresh apple, cut up.', has: [], veg: true, extra: ['fruit'] },
-    { id: 'muffin', cat: 'breakfast', pic: '🍳', name: 'Egg and cheese muffin', price: 4.19, desc: 'Egg and cheese on a toasted muffin.', has: ['egg', 'milk', 'wheat'], veg: true, extra: [] },
-    { id: 'oatmeal', cat: 'breakfast', pic: '🥣', name: 'Oatmeal with fruit', price: 3.29, desc: 'Warm oats with apple and berries.', has: [], veg: true, extra: [] },
-    { id: 'pancakes', cat: 'breakfast', pic: '🥞', name: 'Pancakes', price: 4.49, desc: 'Three pancakes with syrup.', has: ['wheat', 'egg', 'milk'], veg: true, extra: [] },
-    { id: 'water', cat: 'drinks', pic: '💧', name: 'Water', price: 1.29, desc: 'Bottle of water.', has: [], veg: true, extra: [] },
-    { id: 'juice', cat: 'drinks', pic: '🍊', name: 'Orange juice', price: 2.49, desc: 'Cold orange juice.', has: [], veg: true, extra: [] },
-    { id: 'coffee', cat: 'drinks', pic: '☕', name: 'Coffee', price: 1.99, desc: 'Hot coffee. Ask for milk or sugar.', has: [], veg: true, extra: [] },
-    { id: 'shake', cat: 'drinks', pic: '🥤', name: 'Chocolate milkshake', price: 3.99, desc: 'Cold, thick chocolate shake.', has: ['milk'], veg: true, extra: ['shake'] },
-    { id: 'cone', cat: 'desserts', pic: '🍦', name: 'Vanilla ice cream cone', price: 1.99, desc: 'Soft vanilla ice cream in a cone.', has: ['milk', 'wheat'], veg: true, extra: [] },
-    { id: 'pie', cat: 'desserts', pic: '🥧', name: 'Apple pie', price: 1.79, desc: 'Warm apple pie.', has: ['wheat'], veg: true, extra: [] }
+  /* ================= Sample menus (made-up restaurants, sample data) ================= */
+
+  /* diet: 'vg' vegan, 'v' vegetarian, 'p' has pork, '' none of these */
+  function it(name, category, price, pic, desc, has, diet, feel, texture, taste, smell, color, temp, original) {
+    return { name: name, category: category, price: price, pic: pic, desc: desc, has: has,
+      vegan: diet === 'vg', vegetarian: diet === 'v' || diet === 'vg', pork: diet === 'p',
+      feel: feel, texture: texture, taste: taste, smell: smell, color: color, temp: temp, original: original || '' };
+  }
+
+  var B = 'Burgers and sandwiches', C = 'Chicken', S = 'Sides', BR = 'Breakfast', D = 'Drinks', DS = 'Desserts';
+  var ST = 'Starters', M = 'Main dishes';
+
+  var SAMPLES = [
+    {
+      name: 'Corner Grill', pic: '🍔', blurb: 'Burgers and chicken. Menu in English.',
+      language: 'English', langCode: 'en-US', currency: '$',
+      example: 'Example: chicken under $6 with no milk',
+      catPics: { 'Burgers and sandwiches': '🍔', 'Chicken': '🍗', 'Sides': '🍟', 'Breakfast': '🍳', 'Drinks': '🥤', 'Desserts': '🍦' },
+      items: [
+        it('Classic cheeseburger', B, 5.49, '🍔', 'Beef patty, cheese, pickles, and a bun.', ['milk', 'wheat', 'soy'], '', ['mixed', 'sour'], 'soft bun, juicy patty, melted cheese', 'savory and salty, a little sour from pickles', 'grilled meat', 'brown and yellow', 'hot'),
+        it('Plain hamburger', B, 4.29, '🍔', 'Beef patty and a bun. Nothing else.', ['wheat', 'soy'], '', [], 'soft bun, juicy patty', 'savory and plain', 'grilled meat', 'brown', 'hot'),
+        it('Crispy chicken sandwich', B, 6.29, '🥪', 'Fried chicken, lettuce, and mayo on a bun.', ['wheat', 'egg', 'soy'], '', ['crunchy', 'mixed'], 'crunchy chicken, soft bun, creamy mayo', 'salty and savory', 'fried food', 'golden brown', 'hot'),
+        it('Grilled chicken wrap', B, 5.79, '🌯', 'Grilled chicken, lettuce, and tomato in a soft wrap.', ['wheat'], '', ['mixed'], 'soft wrap, tender chicken, crisp lettuce', 'mild and savory', 'mild', 'tan, green, and red', 'hot'),
+        it('Veggie burger', B, 5.99, '🌱', 'Bean and vegetable patty, lettuce, and a bun.', ['wheat', 'soy'], 'vg', ['mushy', 'mixed'], 'soft patty, soft bun', 'savory, a little earthy', 'mild', 'brown and green', 'hot'),
+        it('Fish sandwich', B, 5.69, '🐟', 'Fried fish, cheese, and tartar sauce on a bun.', ['fish', 'wheat', 'egg', 'milk'], '', ['crunchy', 'mixed', 'strongsmell', 'sour'], 'crispy fish, soft bun, creamy sauce', 'salty, a little tangy', 'fried fish', 'golden and white', 'hot'),
+        it('Chicken bites, 6 pieces', C, 4.99, '🍗', 'Small pieces of fried chicken.', ['wheat'], '', ['crunchy'], 'crunchy outside, tender inside', 'salty and mild', 'fried food', 'golden', 'hot'),
+        it('Chicken strips, 3 pieces', C, 5.29, '🍗', 'Long pieces of fried chicken.', ['wheat', 'egg'], '', ['crunchy'], 'crunchy outside, tender inside', 'salty and mild', 'fried food', 'golden', 'hot'),
+        it('Fries, medium', S, 2.99, '🍟', 'Salted potato fries.', [], 'vg', ['crunchy'], 'crisp outside, soft inside', 'salty', 'fried potato', 'golden yellow', 'hot'),
+        it('Side salad', S, 3.49, '🥗', 'Lettuce, tomato, and cucumber.', [], 'vg', ['crunchy', 'mixed'], 'crisp and wet', 'fresh and mild', 'mild', 'green and red', 'cold'),
+        it('Apple slices', S, 1.49, '🍎', 'Fresh apple, cut up.', [], 'vg', ['crunchy'], 'crisp and juicy', 'sweet, a little tart', 'fresh apple', 'white and red', 'cold'),
+        it('Egg and cheese muffin', BR, 4.19, '🍳', 'Egg and cheese on a toasted muffin.', ['egg', 'milk', 'wheat'], 'v', ['mixed'], 'soft egg, melted cheese, toasted muffin', 'savory and salty', 'egg and toast', 'yellow and tan', 'hot'),
+        it('Oatmeal with fruit', BR, 3.29, '🥣', 'Warm oats with apple and berries.', [], 'vg', ['mushy', 'mixed'], 'soft and thick, with small chewy fruit pieces', 'mild and a little sweet', 'mild', 'beige with red fruit', 'hot'),
+        it('Pancakes', BR, 4.49, '🥞', 'Three pancakes with syrup.', ['wheat', 'egg', 'milk'], 'v', [], 'soft and fluffy, sticky syrup', 'sweet', 'sweet and buttery', 'golden', 'hot'),
+        it('Water', D, 1.29, '💧', 'Bottle of water.', [], 'vg', [], 'thin liquid', 'no taste', 'no smell', 'clear', 'cold'),
+        it('Orange juice', D, 2.49, '🍊', 'Cold orange juice.', [], 'vg', ['sour'], 'thin liquid, may have pulp', 'sweet and sour', 'orange', 'orange', 'cold'),
+        it('Coffee', D, 1.99, '☕', 'Hot coffee. Ask for milk or sugar.', [], 'vg', ['strongsmell'], 'thin liquid', 'bitter', 'strong coffee', 'dark brown', 'hot'),
+        it('Chocolate milkshake', D, 3.99, '🥤', 'Cold, thick chocolate shake.', ['milk'], 'v', [], 'thick, smooth, very cold', 'sweet chocolate', 'sweet', 'brown', 'cold'),
+        it('Vanilla ice cream cone', DS, 1.99, '🍦', 'Soft vanilla ice cream in a cone.', ['milk', 'wheat'], 'v', ['crunchy'], 'smooth and cold, crunchy cone', 'sweet', 'mild vanilla', 'white and tan', 'cold'),
+        it('Apple pie', DS, 1.79, '🥧', 'Warm apple pie.', ['wheat'], 'v', [], 'flaky crust, soft warm filling', 'sweet with cinnamon', 'cinnamon', 'golden brown', 'hot')
+      ]
+    },
+    {
+      name: 'Chez Colette', pic: '🥖', blurb: 'French bistro. The menu is in French and shown in plain English.',
+      language: 'French', langCode: 'fr-FR', currency: '€',
+      example: 'Example: no shellfish, nothing chewy, under €15',
+      catPics: { 'Starters': '🥣', 'Main dishes': '🍽️', 'Desserts': '🍮', 'Drinks': '🥤' },
+      catOriginal: { 'Starters': 'Entrées', 'Main dishes': 'Plats', 'Desserts': 'Desserts', 'Drinks': 'Boissons' },
+      crew: {
+        hello: 'Bonjour. Voici ma commande.',
+        quiet: "Je commande sans parler. Merci de montrer, d'écrire ou de taper votre réponse.",
+        note: 'À noter', total: 'Total',
+        yes: 'Oui', no: 'Non', write: "Écrivez-le, s'il vous plaît", thanks: 'Merci',
+        reply: 'Équipe : tapez votre réponse ici'
+      },
+      items: [
+        it('Onion soup with melted cheese', ST, 9, '🧅', 'Hot onion soup with bread and melted cheese on top. Made with beef broth.', ['milk', 'wheat'], '', ['mushy', 'mixed', 'strongsmell'], 'thin soup, soft soaked bread, stretchy cheese', 'savory, a little sweet', 'cooked onion and cheese', 'brown and golden', 'hot', "Soupe à l'oignon gratinée"),
+        it('Salad with warm goat cheese', ST, 11, '🥗', 'Green salad with warm goat cheese on toast.', ['milk', 'wheat'], 'v', ['crunchy', 'mixed', 'strongsmell', 'sour'], 'crisp leaves, creamy cheese, crunchy toast', 'tangy and creamy', 'strong cheese', 'green and white', 'cold', 'Salade de chèvre chaud'),
+        it('Snails in garlic butter', ST, 12, '🐌', 'Six snails baked with garlic and parsley butter.', ['milk'], '', ['chewy', 'jelly', 'strongsmell'], 'chewy and slippery, with oily butter', 'garlic and butter', 'strong garlic', 'dark brown and green', 'hot', 'Escargots de Bourgogne'),
+        it('Steak with fries', M, 24, '🥩', 'Grilled beef steak with potato fries.', [], '', ['chewy', 'crunchy'], 'chewy meat, crisp fries', 'savory and salty', 'grilled meat', 'brown and golden', 'hot', 'Steak frites'),
+        it('Chicken cooked in red wine', M, 22, '🍗', 'Chicken cooked slowly in red wine sauce with mushrooms and bacon.', ['wheat'], 'p', ['mixed'], 'very tender chicken, soft mushrooms, thick sauce', 'rich and savory', 'wine and herbs', 'dark red-brown', 'hot', 'Coq au vin'),
+        it('Mussels in white wine', M, 19, '🦪', 'A pot of mussels cooked in white wine, butter, and garlic.', ['shellfish', 'milk'], '', ['chewy', 'jelly', 'strongsmell'], 'soft, chewy, and slippery, in a thin broth', 'salty, like the sea', 'strong seafood', 'black shells, orange inside', 'hot', 'Moules marinières'),
+        it('Vegetable stew', M, 17, '🍆', 'Eggplant, zucchini, peppers, and tomato cooked until soft.', [], 'vg', ['mushy', 'mixed', 'sour'], 'soft cooked vegetables in sauce', 'tomato and herbs, a little sweet', 'tomato and garlic', 'red, purple, and green', 'hot', 'Ratatouille'),
+        it('Grilled ham and cheese sandwich', M, 13, '🥪', 'Toasted sandwich with ham, cheese, and a creamy white sauce.', ['milk', 'wheat'], 'p', ['crunchy', 'mixed'], 'crisp toast, melted cheese, soft ham', 'salty and creamy', 'toasted cheese', 'golden', 'hot', 'Croque-monsieur'),
+        it('Egg and bacon pie', M, 12, '🥧', 'A slice of baked pie filled with egg, cream, and bacon.', ['egg', 'milk', 'wheat'], 'p', ['mixed'], 'soft egg filling, crumbly crust', 'salty and creamy', 'egg and bacon', 'yellow and golden', 'hot', 'Quiche lorraine'),
+        it('Vanilla custard with a hard sugar top', DS, 9, '🍮', 'Cold vanilla custard. The top is a thin layer of hard, burnt sugar.', ['egg', 'milk'], 'v', ['crunchy'], 'hard, crackly top with smooth cream underneath', 'sweet vanilla and caramel', 'caramel', 'yellow with a brown top', 'cold', 'Crème brûlée'),
+        it('Upside-down apple tart', DS, 10, '🍎', 'Warm tart with soft apples cooked in caramel.', ['wheat', 'milk'], 'v', [], 'soft sticky apples, flaky crust', 'very sweet, caramel', 'caramel and apple', 'dark golden', 'hot', 'Tarte tatin'),
+        it('Chocolate mousse', DS, 8, '🍫', 'Cold, fluffy chocolate dessert.', ['egg', 'milk'], 'v', [], 'light, airy, and smooth', 'rich chocolate, sweet', 'chocolate', 'dark brown', 'cold', 'Mousse au chocolat'),
+        it('Sparkling water', D, 4, '💧', 'Water with bubbles.', [], 'vg', [], 'fizzy bubbles', 'no taste', 'no smell', 'clear', 'cold', 'Eau pétillante'),
+        it('Fresh lemon juice', D, 6, '🍋', 'Lemon juice served with water and sugar. You mix it yourself.', [], 'vg', ['sour'], 'thin liquid', 'very sour until you add sugar', 'lemon', 'pale yellow', 'cold', 'Citron pressé')
+      ]
+    }
   ];
 
   /* ================= Small helpers ================= */
@@ -441,11 +602,14 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
     return node;
   }
 
-  function usd(n) { return '$' + n.toFixed(2); }
   function plural(n, word) { return n + ' ' + word + (n === 1 ? '' : 's'); }
+  function clean(value, max) { return typeof value === 'string' ? value.trim().slice(0, max || 300) : ''; }
 
   var STOP = ['and', 'with', 'the', 'a', 'an', 'of', 'or', 'for', 'piece', 'medium', 'no', 'not', 'without',
-    'avoid', 'free', 'from', 'allergic', 'to', 'any', 'nor', 'vegetarian', 'veggie', 'meatless', 'meat'];
+    'avoid', 'free', 'from', 'allergic', 'to', 'any', 'nor', 'nothing', 'non', 'vegetarian', 'veggie', 'meatless',
+    'vegan', 'meat', 'in', 'on', 'at', 'is', 'it', 'me', 'my', 'i', 'want', 'something', 'some', 'what', 'which',
+    'show', 'that', 'this', 'have', 'do', 'you', 'can', 'please', 'like', 'would', 'under', 'below', 'less',
+    'than', 'up', 'most', 'max', 'cheaper', 'dollar', 'buck', 'euro', 'too', 'very', 'eat', 'made', 'until'];
 
   function singular(word) {
     if (/(ches|shes|xes)$/.test(word)) return word.slice(0, -2);
@@ -453,45 +617,187 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
     if (/s$/.test(word) && !/ss$/.test(word) && word.length > 3) return word.slice(0, -1);
     return word;
   }
-
+  function rawWords(text) { return text.toLowerCase().replace(/[^a-z\s]/g, ' ').split(/\s+/).filter(Boolean); }
   function tokens(text) {
-    return text.toLowerCase().replace(/[^a-z\s]/g, ' ').split(/\s+/)
-      .map(singular)
-      .filter(function (w) { return w && STOP.indexOf(w) === -1; });
-  }
-
-  var byId = {};
-  var catById = {};
-  var vocab = {};
-  CATS.forEach(function (c) { catById[c.id] = c; });
-  MENU.forEach(function (item) {
-    var cat = catById[item.cat];
-    item.words = tokens(item.name + ' ' + cat.name + ' ' + cat.words.join(' ') + ' ' + item.extra.join(' '));
-    item.words.forEach(function (w) { vocab[w] = true; });
-    byId[item.id] = item;
-  });
-
-  function hasText(item) {
-    return item.has.length ? 'Contains ' + item.has.join(', ') + '.' : 'No listed allergens.';
+    return rawWords(text).map(singular).filter(function (w) { return STOP.indexOf(w) === -1; });
   }
 
   /* ================= State ================= */
 
+  function emptyNeeds() { return { avoid: [], vegetarian: false, vegan: false, noPork: false, words: '', budget: null }; }
+  function emptyFind() { return { cat: 'all', sort: 'menu', words: [], shown: [], max: null, avoid: [], vegetarian: false }; }
+
   var state = {
     format: null,
     view: 'start',
-    filters: { cat: 'all', max: null, exclude: [], veg: false, words: [] },
+    needs: emptyNeeds(),
+    needsSaved: false,
+    menu: null,
+    find: emptyFind(),
     order: [],            // [{ id, qty }]
     note: '',
-    wiz: { step: 'cat', cat: null, last: null },
-    speaking: false
+    wiz: { step: 'cat', cat: null, item: null, last: null },
+    speaking: false,
+    busy: false,
+    key: '',
+    model: 'claude-haiku-4-5-20251001'
   };
 
   var canSpeak = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
   var Recognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
 
+  function store(name, value) {
+    try {
+      if (value === null) window.localStorage.removeItem('comfortmenu.' + name);
+      else window.localStorage.setItem('comfortmenu.' + name, value);
+    } catch (e) { /* storage is optional */ }
+  }
+  function load(name) {
+    try { return window.localStorage.getItem('comfortmenu.' + name); } catch (e) { return null; }
+  }
+
+  /* ================= Menu model ================= */
+
+  function validIds(list, type) {
+    if (!Array.isArray(list)) return [];
+    return list.filter(function (id, i) {
+      return avoidById[id] && avoidById[id].type === type && list.indexOf(id) === i;
+    });
+  }
+
+  /* Turns raw menu data (a sample, or what the AI read from a photo) into the shape the page uses. */
+  function buildMenu(raw) {
+    var menu = {
+      name: clean(raw.name) || 'Scanned menu',
+      language: clean(raw.language) || 'English',
+      langCode: clean(raw.langCode, 12),
+      currency: clean(raw.currency, 4) || '$',
+      estimated: !!raw.estimated,
+      crew: null,
+      photo: raw.photo || null,
+      catOriginal: raw.catOriginal || null,
+      catPics: raw.catPics || {},
+      example: raw.example || '',
+      items: [], cats: [], byId: {}, vocab: {}
+    };
+    if (raw.crew && typeof raw.crew === 'object' && menu.language !== 'English') {
+      menu.crew = {};
+      Object.keys(CREW_EN).forEach(function (key) { menu.crew[key] = clean(raw.crew[key], 200) || CREW_EN[key]; });
+    }
+    (Array.isArray(raw.items) ? raw.items : []).slice(0, 60).forEach(function (r, i) {
+      if (!r || typeof r !== 'object') return;
+      var name = clean(r.name);
+      if (!name) return;
+      var item = {
+        id: 'm' + i,
+        name: name,
+        original: clean(r.original),
+        cat: clean(r.category, 60) || 'Other',
+        price: (typeof r.price === 'number' && isFinite(r.price) && r.price >= 0) ? r.price : null,
+        desc: clean(r.desc),
+        has: validIds(r.has, 'has'),
+        feel: validIds(r.feel, 'feel'),
+        vegan: r.vegan === true,
+        vegetarian: r.vegetarian === true || r.vegan === true,
+        pork: r.pork === true,
+        texture: clean(r.texture, 120), taste: clean(r.taste, 120), smell: clean(r.smell, 120), color: clean(r.color, 120),
+        temp: ['hot', 'cold', 'room'].indexOf(r.temp) !== -1 ? r.temp : '',
+        pic: clean(r.pic, 8) || '🍽️'
+      };
+      if (item.original.toLowerCase() === item.name.toLowerCase()) item.original = '';
+      item.text = (item.name + ' ' + item.original + ' ' + item.desc).toLowerCase();
+      item.words = tokens(item.name + ' ' + item.cat + ' ' + item.desc + ' ' + item.texture + ' ' + item.taste);
+      item.words.forEach(function (w) { menu.vocab[w] = true; });
+      menu.items.push(item);
+      menu.byId[item.id] = item;
+      if (!menu.cats.some(function (c) { return c.name === item.cat; })) {
+        menu.cats.push({ name: item.cat, pic: menu.catPics[item.cat] || item.pic });
+      }
+    });
+    return menu;
+  }
+
+  function money(n) { return n === null ? 'Price not listed' : state.menu.currency + n.toFixed(2); }
+
+  function hasText(item) {
+    if (state.menu.estimated) {
+      return item.has.length ? 'Likely contains ' + shortList(item.has) + '.' : 'No common allergens found by AI. Confirm with staff.';
+    }
+    return item.has.length ? 'Contains ' + shortList(item.has) + '.' : 'No listed allergens.';
+  }
+  function shortList(ids) { return ids.map(function (id) { return avoidById[id].short; }).join(', '); }
+
+  function feelLines(item) {
+    var lines = [];
+    if (item.texture) lines.push('Texture: ' + item.texture + '.');
+    if (item.taste) lines.push('Taste: ' + item.taste + '.');
+    if (item.smell) lines.push('Smell: ' + item.smell + '.');
+    if (item.color) lines.push('Color: ' + item.color + '.');
+    if (item.temp) lines.push(item.temp === 'room' ? 'Served at room temperature.' : 'Served ' + item.temp + '.');
+    return lines;
+  }
+
+  /* Why an item does not fit this person. An empty list means it fits. */
+  function conflicts(item) {
+    var needs = state.needs, find = state.find, reasons = [];
+    var ids = needs.avoid.concat(find.avoid.filter(function (id) { return needs.avoid.indexOf(id) === -1; }));
+    ids.forEach(function (id) {
+      var def = avoidById[id];
+      if (!def) return;
+      if (def.type === 'has' && item.has.indexOf(id) !== -1) reasons.push('contains ' + def.short);
+      if (def.type === 'feel' && item.feel.indexOf(id) !== -1) reasons.push(def.short);
+    });
+    if (needs.vegan && !item.vegan) reasons.push('not vegan');
+    else if ((needs.vegetarian || find.vegetarian) && !item.vegetarian) reasons.push('not vegetarian');
+    if (needs.noPork && item.pork) reasons.push('has pork');
+    needs.words.split(',').forEach(function (w) {
+      w = w.trim().toLowerCase();
+      if (w.length > 1 && item.text.indexOf(w) !== -1) reasons.push('has "' + w + '"');
+    });
+    var max = null;
+    if (needs.budget !== null) max = needs.budget;
+    if (find.max !== null && (max === null || find.max < max)) max = find.max;
+    if (max !== null && item.price !== null && item.price > max) reasons.push('costs more than ' + money(max));
+    return reasons;
+  }
+
+  function matched() {
+    var f = state.find;
+    var list = state.menu.items.filter(function (item) {
+      if (f.cat !== 'all' && item.cat !== f.cat) return false;
+      return f.words.every(function (w) { return item.words.indexOf(w) !== -1; });
+    });
+    if (f.sort === 'price') {
+      list = list.slice().sort(function (a, b) {
+        if (a.price === null) return 1;
+        if (b.price === null) return -1;
+        return a.price - b.price;
+      });
+    }
+    return list;
+  }
+  function split() {
+    var fit = [], other = [];
+    matched().forEach(function (item) {
+      var why = conflicts(item);
+      if (why.length) other.push({ item: item, why: why }); else fit.push(item);
+    });
+    return { fit: fit, other: other };
+  }
+
   function orderCount() { return state.order.reduce(function (n, l) { return n + l.qty; }, 0); }
-  function orderTotal() { return state.order.reduce(function (n, l) { return n + l.qty * byId[l.id].price; }, 0); }
+  function orderTotal() {
+    return state.order.reduce(function (n, l) {
+      var price = state.menu.byId[l.id].price;
+      return n + l.qty * (price === null ? 0 : price);
+    }, 0);
+  }
+
+  function totalText() {
+    var unlisted = state.order.some(function (l) { return state.menu.byId[l.id].price === null; });
+    if (!unlisted) return money(orderTotal());
+    return orderTotal() > 0 ? money(orderTotal()) + ' plus items with no listed price' : 'Ask staff for the price';
+  }
 
   /* ================= Speech and captions ================= */
 
@@ -511,12 +817,12 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
     renderBar();
   }
 
-  function speak(text) {
+  function speak(text, lang) {
     if (!canSpeak) return;
     try {
       window.speechSynthesis.cancel();
       var utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'en-US';
+      utterance.lang = lang || 'en-US';
       utterance.rate = 0.95;
       utterance.onstart = function () { state.speaking = true; renderBar(); };
       utterance.onend = utterance.onerror = function () { state.speaking = false; renderBar(); };
@@ -525,19 +831,21 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
   }
 
   /* Everything the page says goes through here, so speech always has a caption. */
-  function tell(text, aloud) {
+  function tell(text, aloud, lang) {
     setCaption(text);
     if (state.format === 'quiet') return;
-    if (state.format === 'listen' || aloud) speak(text);
+    if (state.format === 'listen' || aloud) speak(text, lang);
   }
 
   /* ================= Views ================= */
 
-  var VIEWS = ['start', 'menu', 'card', 'crew'];
+  var VIEWS = ['start', 'needs', 'home', 'scan', 'menu', 'card', 'crew'];
 
   function setView(view) {
     state.view = view;
     VIEWS.forEach(function (v) { $('view-' + v).hidden = v !== view; });
+    if (view === 'needs') syncNeeds();
+    if (view === 'scan') renderScan();
     if (view === 'menu') renderMenu();
     if (view === 'card') renderCard();
     if (view === 'crew') renderCrew();
@@ -550,7 +858,7 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
     var review = $('reviewBtn');
     var stop = $('stopBtn');
     review.hidden = !(state.view === 'menu' && state.format !== 'pictures');
-    review.textContent = 'Review my order (' + plural(orderCount(), 'item') + ')';
+    review.textContent = 'Review my order (' + plural(state.menu ? orderCount() : 0, 'item') + ')';
 
     var showStop = canSpeak && state.format !== 'quiet' && state.view !== 'start' &&
       (state.format === 'listen' || state.speaking);
@@ -564,10 +872,10 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
     $('bar').classList.toggle('bar--empty', empty);
   }
 
-  /* ---------- Start ---------- */
+  /* ---------- Start: format ---------- */
 
   function buildStart() {
-    var box = $('choices');
+    var box = $('formatChoices');
     FORMATS.forEach(function (f) {
       box.append(el('button', { type: 'button', class: 'choice', 'data-format': f.id },
         el('span', { class: 'pic', 'aria-hidden': 'true', text: f.pic }),
@@ -577,60 +885,222 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
     });
   }
 
-  function setFormat(id, quietly) {
+  function applyFormat(id) {
     var format = FORMATS.filter(function (f) { return f.id === id; })[0];
-    if (!format) return;
+    if (!format) return null;
     stopSpeaking();
     state.format = id;
-    try { window.localStorage.setItem('comfortmenu.format', id); } catch (e) { /* storage is optional */ }
+    store('format', id);
     document.documentElement.setAttribute('data-format', id);
     $('formatLabel').textContent = format.name;
-    $('formatNow').hidden = false;
+    $('nav').hidden = false;
     $('listUI').hidden = id === 'pictures';
     $('wizard').hidden = id !== 'pictures';
     $('voiceBtn').hidden = !(Recognition && id !== 'quiet');
-    state.wiz = { step: 'cat', cat: null, last: null };
-    setView('menu');
-
-    if (quietly) { setCaption('Opened in your saved format: ' + format.name + '.'); return; }
-    if (id === 'listen' && !canSpeak) { setCaption('This browser cannot read aloud. The menu still works on screen.'); return; }
-    if (id === 'listen') tell('Menu open. ' + MENU.length + ' items. Type what you want in Ask the menu, or press Listen on any item.');
-    else if (id === 'pictures') setCaption('Pictures format. One question at a time.');
-    else if (id === 'large') setCaption('Large print format.');
-    else setCaption('Quiet format. Nothing will be spoken.');
+    state.wiz = { step: 'cat', cat: null, item: null, last: null };
+    return format;
   }
 
-  /* ---------- Menu: ask and filters ---------- */
+  function chooseFormat(id) {
+    var format = applyFormat(id);
+    if (!format) return;
+    if (!state.needsSaved) setView('needs');
+    else if (state.menu) setView('menu');
+    else setView('home');
+
+    if (id === 'listen' && !canSpeak) setCaption('This browser cannot read aloud. Everything still works on screen.');
+    else if (id === 'listen') tell('Listen format. The page will read things out loud.');
+    else if (id === 'quiet') setCaption('Quiet format. Nothing will be spoken.');
+    else setCaption(format.name + ' format.');
+  }
+
+  /* ---------- Food needs ---------- */
+
+  function buildNeeds() {
+    var form = $('needsForm');
+    function group(title, type) {
+      var box = el('div', { class: 'checks' });
+      AVOID.filter(function (a) { return a.type === type; }).forEach(function (a) {
+        box.append(el('div', { class: 'check' },
+          el('input', { type: 'checkbox', id: 'need-' + a.id, 'data-avoid': a.id }),
+          el('label', { for: 'need-' + a.id, text: a.label })
+        ));
+      });
+      return el('fieldset', null, el('legend', { text: title }), box);
+    }
+    function check(id, label) {
+      return el('div', { class: 'check' }, el('input', { type: 'checkbox', id: id }), el('label', { for: id, text: label }));
+    }
+    form.append(
+      group('Allergens to leave out', 'has'),
+      el('fieldset', null, el('legend', { text: 'Diet' }),
+        el('div', { class: 'checks' }, check('needVegetarian', 'Vegetarian'), check('needVegan', 'Vegan'), check('needNoPork', 'No pork'))),
+      group('Textures, tastes, and smells to avoid', 'feel'),
+      el('div', { class: 'field' },
+        el('label', { for: 'needWords', text: 'Other things to avoid' }),
+        el('p', { class: 'hint', id: 'needWordsHint', text: 'Separate with commas. Example: mushrooms, walnuts, mayo' }),
+        el('input', { type: 'text', id: 'needWords', autocomplete: 'off', 'aria-describedby': 'needWordsHint' })),
+      el('div', { class: 'field' },
+        el('label', { for: 'needBudget', text: 'Most I want to pay for one dish' }),
+        el('p', { class: 'hint', id: 'needBudgetHint', text: 'A number, in the money the menu uses. Leave empty for no limit.' }),
+        el('input', { type: 'number', id: 'needBudget', min: '1', step: '1', inputmode: 'decimal', 'aria-describedby': 'needBudgetHint' }))
+    );
+    $('needsDisclaimer').textContent = DISCLAIMER;
+    $('scanDisclaimer').textContent = DISCLAIMER;
+    form.addEventListener('change', readNeeds);
+  }
+
+  function syncNeeds() {
+    var n = state.needs;
+    AVOID.forEach(function (a) { $('need-' + a.id).checked = n.avoid.indexOf(a.id) !== -1; });
+    $('needVegetarian').checked = n.vegetarian;
+    $('needVegan').checked = n.vegan;
+    $('needNoPork').checked = n.noPork;
+    $('needWords').value = n.words;
+    $('needBudget').value = n.budget === null ? '' : n.budget;
+  }
+
+  function readNeeds() {
+    var budget = parseFloat($('needBudget').value);
+    state.needs = {
+      avoid: AVOID.filter(function (a) { return $('need-' + a.id).checked; }).map(function (a) { return a.id; }),
+      vegetarian: $('needVegetarian').checked,
+      vegan: $('needVegan').checked,
+      noPork: $('needNoPork').checked,
+      words: clean($('needWords').value, 200),
+      budget: isNaN(budget) || budget <= 0 ? null : budget
+    };
+    saveNeeds();
+  }
+
+  function saveNeeds() {
+    state.needsSaved = true;
+    store('needs', JSON.stringify(state.needs));
+  }
+
+  function loadNeeds() {
+    var raw = load('needs');
+    if (!raw) return;
+    try {
+      var n = JSON.parse(raw);
+      state.needs = {
+        avoid: Array.isArray(n.avoid) ? n.avoid.filter(function (id) { return !!avoidById[id]; }) : [],
+        vegetarian: n.vegetarian === true, vegan: n.vegan === true, noPork: n.noPork === true,
+        words: clean(n.words, 200),
+        budget: typeof n.budget === 'number' && n.budget > 0 ? n.budget : null
+      };
+      state.needsSaved = true;
+    } catch (e) { /* ignore a damaged save */ }
+  }
+
+  function needsCount() {
+    var n = state.needs;
+    return n.avoid.length + (n.vegetarian ? 1 : 0) + (n.vegan ? 1 : 0) + (n.noPork ? 1 : 0) +
+      n.words.split(',').filter(function (w) { return w.trim().length > 1; }).length + (n.budget !== null ? 1 : 0);
+  }
+
+  /* ---------- Home ---------- */
+
+  function buildHome() {
+    var box = $('sampleChoices');
+    SAMPLES.forEach(function (s, i) {
+      box.append(el('button', { type: 'button', class: 'choice', 'data-sample': String(i) },
+        el('span', { class: 'pic', 'aria-hidden': 'true', text: s.pic }),
+        el('span', { class: 'choice-name', text: s.name }),
+        el('span', { class: 'choice-desc', text: s.blurb })
+      ));
+    });
+  }
+
+  function openMenu(menu) {
+    var hadOrder = state.order.length > 0;
+    state.menu = menu;
+    state.order = [];
+    state.note = '';
+    state.find = emptyFind();
+    state.wiz = { step: 'cat', cat: null, item: null, last: null };
+
+    $('sub').textContent = menu.name + (menu.language !== 'English' ? ', translated from ' + menu.language : '');
+    $('h-menu').textContent = menu.name;
+    $('menuNotice').textContent = menu.estimated ? AI_NOTICE : SAMPLE_NOTICE;
+    $('askHint').textContent = menu.example || 'Example: vegetarian under ' + menu.currency + '15, nothing crunchy';
+    $('ask').value = '';
+    showAnswer('');
+
+    var select = $('fCat');
+    select.replaceChildren(el('option', { value: 'all', text: 'All food' }));
+    menu.cats.forEach(function (c) { select.append(el('option', { value: c.name, text: c.name })); });
+    $('fSort').value = 'menu';
+
+    renderOriginal();
+    setView('menu');
+    tell(menu.name + ' menu open. ' + plural(menu.items.length, 'item') + '.' +
+      (menu.language !== 'English' ? ' Translated from ' + menu.language + '.' : '') +
+      (hadOrder ? ' Your earlier order was cleared.' : ''));
+  }
+
+  /* The menu as printed: the photo for a scan, or the original-language menu for a sample. */
+  function renderOriginal() {
+    var menu = state.menu, box = $('originalBox'), body = $('originalBody');
+    body.replaceChildren();
+    if (menu.photo) {
+      $('originalSummary').textContent = 'See your photo of the menu';
+      body.append(el('img', { src: menu.photo, alt: 'Your photo of the menu' }));
+      box.open = false;
+      box.hidden = false;
+    } else if (menu.catOriginal) {
+      $('originalSummary').textContent = 'See the original menu in ' + menu.language;
+      var paper = el('div', { class: 'paper', lang: menu.langCode }, el('p', { class: 'paper-title', text: menu.name }));
+      menu.cats.forEach(function (cat) {
+        var ul = el('ul');
+        menu.items.filter(function (i) { return i.cat === cat.name; }).forEach(function (item) {
+          ul.append(el('li', null,
+            el('span', { text: item.original || item.name }),
+            el('span', { text: (item.price === null ? '' : item.price + ' ' + menu.currency) })));
+        });
+        paper.append(el('p', { class: 'paper-cat', text: menu.catOriginal[cat.name] || cat.name }), ul);
+      });
+      body.append(paper);
+      box.open = true;
+      box.hidden = false;
+    } else {
+      box.hidden = true;
+    }
+  }
+
+  /* ---------- Menu: ask ---------- */
 
   function parseAsk(text) {
     var q = ' ' + text.toLowerCase() + ' ';
-    var out = { max: null, exclude: [], veg: false, words: [] };
+    var out = { max: null, avoid: [], vegetarian: false, words: [], shown: [] };
 
-    var price = q.match(/(?:under|below|less than|cheaper than|up to|at most|max(?:imum)?)\s*\$?\s*(\d+(?:\.\d{1,2})?)/) ||
-      q.match(/\$\s*(\d+(?:\.\d{1,2})?)/) ||
-      q.match(/(\d+(?:\.\d{1,2})?)\s*(?:dollars|bucks)/);
+    var price = q.match(/(?:under|below|less than|cheaper than|up to|at most|max(?:imum)?)\s*[$€£]?\s*(\d+(?:\.\d{1,2})?)/) ||
+      q.match(/[$€£]\s*(\d+(?:\.\d{1,2})?)/) ||
+      q.match(/(\d+(?:\.\d{1,2})?)\s*(?:dollars|bucks|euros)/);
     if (price) out.max = parseFloat(price[1]);
 
     var allSyn = [];
-    ALLERGENS.forEach(function (a) { allSyn = allSyn.concat(a.syn); });
-    var between = '(?:(?:any|or|and|nor|' + allSyn.join('|') + ')[\\s,]+)*';
+    AVOID.forEach(function (a) { allSyn = allSyn.concat(a.syn); });
+    var between = '(?:(?:any|or|and|nor|want|like|eat|have|too|very|the|a|' + allSyn.join('|') + ')[\\s,]+)*';
     var dropped = [];
-    ALLERGENS.forEach(function (a) {
+    AVOID.forEach(function (a) {
       var hit = a.syn.some(function (s) {
-        var negated = new RegExp('\\b(?:no|without|avoid|free of|free from|allergic to)\\s+' + between + s + '\\b');
+        var negated = new RegExp('\\b(?:no|not|nothing|non|without|avoid|free of|free from|allergic to)\\s+' + between + s + '\\b');
         var free = new RegExp('\\b' + s + '[- ]free\\b');
         return negated.test(q) || free.test(q);
       });
-      if (hit) { out.exclude.push(a.id); dropped = dropped.concat(a.syn.map(singular)); }
+      if (hit) {
+        out.avoid.push(a.id);
+        a.syn.forEach(function (s) { dropped = dropped.concat(rawWords(s).map(singular)); });
+      }
     });
 
-    out.veg = /\b(vegetarian|veggie|meatless|no meat|without meat)\b/.test(q);
+    out.vegetarian = /\b(vegetarian|veggie|meatless|vegan|no meat|without meat)\b/.test(q);
 
     /* Keep the word as typed for the summary, and its base form for matching. */
-    out.shown = [];
-    q.replace(/[^a-z\s]/g, ' ').split(/\s+/).forEach(function (raw) {
+    rawWords(q).forEach(function (raw) {
       var base = singular(raw);
-      if (!raw || STOP.indexOf(base) !== -1 || !vocab[base]) return;
+      if (STOP.indexOf(base) !== -1 || !state.menu.vocab[base]) return;
       if (dropped.indexOf(base) !== -1 || out.words.indexOf(base) !== -1) return;
       out.words.push(base);
       out.shown.push(raw);
@@ -638,59 +1108,53 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
     return out;
   }
 
-  function visibleItems() {
-    var f = state.filters;
-    return MENU.filter(function (item) {
-      if (f.cat !== 'all' && item.cat !== f.cat) return false;
-      if (f.max !== null && item.price > f.max) return false;
-      if (f.veg && !item.veg) return false;
-      if (f.exclude.some(function (a) { return item.has.indexOf(a) !== -1; })) return false;
-      return f.words.every(function (w) { return item.words.indexOf(w) !== -1; });
-    });
-  }
-
-  function filterSummary() {
-    var f = state.filters;
-    var parts = [];
-    if (f.words.length) parts.push('"' + (f.shown || f.words).join(' ') + '"');
-    if (f.cat !== 'all') parts.push(catById[f.cat].name.toLowerCase());
-    if (f.veg) parts.push('vegetarian');
-    if (f.max !== null) parts.push(usd(f.max) + ' or less');
-    if (f.exclude.length) parts.push('without ' + f.exclude.join(' or '));
+  function findSummary() {
+    var f = state.find, parts = [];
+    if (f.words.length) parts.push('"' + f.shown.join(' ') + '"');
+    if (f.cat !== 'all') parts.push(f.cat.toLowerCase());
+    if (f.vegetarian) parts.push('vegetarian');
+    if (f.max !== null) parts.push(money(f.max) + ' or less');
+    if (f.avoid.length) parts.push('without ' + f.avoid.map(function (id) { return avoidById[id].short; }).join(' or '));
     return parts.join(', ');
   }
 
-  function syncFilterControls() {
-    var f = state.filters;
-    $('fCat').value = f.cat;
-    $('fMax').value = f.max === null ? '' : f.max;
-    $('fVeg').checked = f.veg;
-    ALLERGENS.forEach(function (a) { $('fa-' + a.id).checked = f.exclude.indexOf(a.id) !== -1; });
+  function showAnswer(text) {
+    $('answer').textContent = text;
+    $('answer').hidden = !text;
   }
 
   function runAsk() {
     var text = $('ask').value.trim();
-    if (!text) { setCaption('Type what you want first. Example: chicken under $6 with no milk.'); return; }
+    if (!text) { setCaption('Type what you want first. ' + $('askHint').textContent + '.'); return; }
     var parsed = parseAsk(text);
-    var understood = parsed.max !== null || parsed.exclude.length || parsed.veg || parsed.words.length;
+    var understood = parsed.max !== null || parsed.avoid.length || parsed.vegetarian || parsed.words.length;
+    var looksLikeQuestion = /\?|^\s*(what|which|is|are|does|do|can|how|why|tell)\b/i.test(text);
+
+    if (state.key && (!understood || looksLikeQuestion)) { askAI(text); return; }
     if (!understood) {
-      tell('No food word, price, or allergen found in that. Example: chicken under $6 with no milk.');
+      showAnswer('');
+      tell((looksLikeQuestion ? 'Open questions need an AI key, which you can add under Scan a menu. Without one, search by food words, prices, and things to avoid. '
+        : 'No food word, price, or thing to avoid found in that. ') + $('askHint').textContent + '.');
       return;
     }
-    state.filters = { cat: 'all', max: parsed.max, exclude: parsed.exclude, veg: parsed.veg, words: parsed.words, shown: parsed.shown };
-    syncFilterControls();
+
+    var cat = state.find.cat, sort = state.find.sort;
+    state.find = { cat: 'all', sort: sort, words: parsed.words, shown: parsed.shown, max: parsed.max, avoid: parsed.avoid, vegetarian: parsed.vegetarian };
+    if (cat !== 'all') $('fCat').value = 'all';
     renderList();
 
-    var found = visibleItems();
-    var answer;
-    if (!found.length) {
-      answer = 'Nothing matches. Try a higher price or fewer limits.';
-    } else if (found.length <= 4) {
-      answer = plural(found.length, 'item') + (found.length === 1 ? ' matches: ' : ' match: ') +
-        found.map(function (i) { return i.name + ', ' + usd(i.price); }).join('. ') + '.';
+    var groups = split(), fit = groups.fit, answer;
+    if (!fit.length && groups.other.length) {
+      answer = 'Nothing fits. ' + plural(groups.other.length, 'item') + ' matched but did not fit. Open "Does not fit" below the list to see why.';
+    } else if (!fit.length) {
+      answer = 'Nothing matches. Try other words or fewer limits.';
+    } else if (fit.length <= 4) {
+      answer = plural(fit.length, 'item') + (fit.length === 1 ? ' fits: ' : ' fit: ') +
+        fit.map(function (i) { return i.name + ', ' + money(i.price); }).join('. ') + '.';
     } else {
-      answer = plural(found.length, 'item') + ' match. Add a food word or a price to narrow it down.';
+      answer = plural(fit.length, 'item') + ' fit. Add a food word or a price to narrow it down.';
     }
+    showAnswer(answer);
     tell(answer);
   }
 
@@ -712,37 +1176,14 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
     }
   }
 
-  function buildFilters() {
-    var select = $('fCat');
-    select.append(el('option', { value: 'all', text: 'All food' }));
-    CATS.forEach(function (c) { select.append(el('option', { value: c.id, text: c.name })); });
-
-    var box = $('fAllergens');
-    ALLERGENS.forEach(function (a) {
-      box.append(el('div', { class: 'check' },
-        el('input', { type: 'checkbox', id: 'fa-' + a.id, 'data-allergen': a.id }),
-        el('label', { for: 'fa-' + a.id, text: a.label })
-      ));
-    });
-  }
-
-  function readFilterControls() {
-    var max = parseFloat($('fMax').value);
-    state.filters.cat = $('fCat').value;
-    state.filters.max = isNaN(max) ? null : max;
-    state.filters.veg = $('fVeg').checked;
-    state.filters.exclude = ALLERGENS.filter(function (a) { return $('fa-' + a.id).checked; })
-      .map(function (a) { return a.id; });
-    renderList();
-    setCaption('Showing ' + plural(visibleItems().length, 'item') + '.');
-  }
-
-  function clearFilters() {
-    state.filters = { cat: 'all', max: null, exclude: [], veg: false, words: [] };
+  function clearFind() {
+    state.find = emptyFind();
     $('ask').value = '';
-    syncFilterControls();
+    $('fCat').value = 'all';
+    $('fSort').value = 'menu';
+    showAnswer('');
     renderList();
-    setCaption('Filters cleared. Showing all ' + MENU.length + ' items.');
+    setCaption('Search cleared.');
   }
 
   /* ---------- Menu: list ---------- */
@@ -752,43 +1193,65 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
     else renderList();
   }
 
+  function itemNode(item, why) {
+    var lines = feelLines(item);
+    return el('li', { class: 'item' },
+      el('span', { class: 'pic', 'aria-hidden': 'true', text: item.pic }),
+      el('div', null,
+        el('div', { class: 'item-head' },
+          el('h4', { text: item.name }),
+          el('p', { class: 'price', text: money(item.price) })
+        ),
+        item.original ? el('p', { class: 'original' }, 'On the menu: ', el('span', { lang: state.menu.langCode || null, text: item.original })) : null,
+        el('p', { class: 'desc', text: item.desc }),
+        el('p', { text: hasText(item) }),
+        why && why.length ? el('p', { class: 'reasons', text: 'Does not fit: ' + why.join('; ') + '.' }) : null,
+        lines.length ? el('details', { class: 'feel' },
+          el('summary', { 'aria-label': 'What it is like: ' + item.name, text: 'What it is like' }),
+          el('ul', { class: 'feel-list' }, lines.map(function (line) { return el('li', { text: line }); }))
+        ) : null,
+        el('div', { class: 'item-actions' },
+          el('button', { type: 'button', class: 'btn', 'data-add': item.id, 'aria-label': 'Add to order: ' + item.name, text: 'Add to order' }),
+          (state.format === 'listen' && canSpeak) ?
+            el('button', { type: 'button', class: 'btn-quiet', 'data-listen': item.id, 'aria-label': 'Listen: ' + item.name, text: 'Listen' }) : null
+        )
+      )
+    );
+  }
+
   function renderList() {
-    var found = visibleItems();
-    var summary = filterSummary();
-    $('count').textContent = 'Showing ' + found.length + ' of ' + MENU.length + ' items' +
-      (summary ? ': ' + summary : '') + '.';
+    var menu = state.menu;
+    var groups = split(), fit = groups.fit, other = groups.other;
+    var summary = findSummary();
+    var limits = needsCount();
+    $('count').textContent = plural(fit.length, 'item') + (fit.length === 1 ? ' fits' : ' fit') +
+      (summary ? ' for ' + summary : '') +
+      (limits ? ', using ' + plural(limits, 'food need') : '') + '.' +
+      (other.length ? ' ' + other.length + (other.length === 1 ? ' does' : ' do') + ' not fit.' : '');
 
     var list = $('list');
     list.replaceChildren();
-    if (!found.length) {
-      list.append(el('p', { class: 'empty', text: 'Nothing matches. Try a higher price or fewer limits, or clear the filters.' }));
-      return;
+    if (!fit.length) {
+      list.append(el('p', { class: 'empty', text: other.length ?
+        'Nothing fits right now. Open "Does not fit" below to see why, or edit your food needs.' :
+        'Nothing matches. Try other words, or clear the search.' }));
+    } else if (state.find.sort === 'price') {
+      list.append(el('section', { class: 'group' }, el('h3', { text: 'Lowest price first' }),
+        el('ul', null, fit.map(function (item) { return itemNode(item, null); }))));
+    } else {
+      menu.cats.forEach(function (cat) {
+        var items = fit.filter(function (i) { return i.cat === cat.name; });
+        if (!items.length) return;
+        list.append(el('section', { class: 'group' }, el('h3', { text: cat.name }),
+          el('ul', null, items.map(function (item) { return itemNode(item, null); }))));
+      });
     }
 
-    CATS.forEach(function (cat) {
-      var items = found.filter(function (i) { return i.cat === cat.id; });
-      if (!items.length) return;
-      var ul = el('ul');
-      items.forEach(function (item) {
-        ul.append(el('li', { class: 'item' },
-          el('span', { class: 'pic', 'aria-hidden': 'true', text: item.pic }),
-          el('div', null,
-            el('div', { class: 'item-head' },
-              el('h4', { text: item.name }),
-              el('p', { class: 'price', text: usd(item.price) })
-            ),
-            el('p', { class: 'desc', text: item.desc }),
-            el('p', { text: hasText(item) }),
-            el('div', { class: 'item-actions' },
-              el('button', { type: 'button', class: 'btn', 'data-add': item.id, 'aria-label': 'Add to order: ' + item.name, text: 'Add to order' }),
-              (state.format === 'listen' && canSpeak) ?
-                el('button', { type: 'button', class: 'btn-quiet', 'data-listen': item.id, 'aria-label': 'Listen: ' + item.name, text: 'Listen' }) : null
-            )
-          )
-        ));
-      });
-      list.append(el('section', { class: 'group' }, el('h3', { text: cat.name }), ul));
-    });
+    var otherList = $('otherList');
+    otherList.replaceChildren();
+    other.forEach(function (o) { otherList.append(itemNode(o.item, o.why)); });
+    $('otherSummary').textContent = 'Does not fit (' + plural(other.length, 'item') + ')';
+    $('otherBox').hidden = !other.length;
   }
 
   function addToOrder(id) {
@@ -800,16 +1263,15 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
   /* ---------- Menu: pictures, one step at a time ---------- */
 
   function renderWizard(moveFocus) {
-    var box = $('wizard');
-    var wiz = state.wiz;
+    var box = $('wizard'), wiz = state.wiz, menu = state.menu;
     box.replaceChildren();
     var heading;
 
     if (wiz.step === 'cat') {
       heading = el('h3', { class: 'wiz-q', tabindex: '-1', text: 'What would you like?' });
       var cats = el('div', { class: 'tiles' });
-      CATS.forEach(function (c) {
-        cats.append(el('button', { type: 'button', class: 'tile', 'data-wcat': c.id },
+      menu.cats.forEach(function (c) {
+        cats.append(el('button', { type: 'button', class: 'tile', 'data-wcat': c.name },
           el('span', { class: 'pic', 'aria-hidden': 'true', text: c.pic }),
           el('span', { class: 'tile-name', text: c.name })
         ));
@@ -822,22 +1284,41 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
         );
       }
     } else if (wiz.step === 'item') {
-      heading = el('h3', { class: 'wiz-q', tabindex: '-1', text: 'Pick one: ' + catById[wiz.cat].name });
+      heading = el('h3', { class: 'wiz-q', tabindex: '-1', text: 'Pick one: ' + wiz.cat });
       var tiles = el('div', { class: 'tiles' });
-      MENU.filter(function (i) { return i.cat === wiz.cat; }).forEach(function (item) {
-        tiles.append(el('button', { type: 'button', class: 'tile', 'data-witem': item.id },
-          el('span', { class: 'pic', 'aria-hidden': 'true', text: item.pic }),
-          el('span', { class: 'tile-name', text: item.name }),
-          el('span', { class: 'price', text: usd(item.price) }),
-          el('span', { class: 'tile-has', text: item.has.length ? 'Has ' + item.has.join(', ') : 'No listed allergens' })
+      var rows = menu.items.filter(function (i) { return i.cat === wiz.cat; })
+        .map(function (item) { return { item: item, why: conflicts(item) }; });
+      rows.sort(function (a, b) { return (a.why.length ? 1 : 0) - (b.why.length ? 1 : 0); });
+      rows.forEach(function (row) {
+        tiles.append(el('button', { type: 'button', class: 'tile', 'data-witem': row.item.id },
+          el('span', { class: 'pic', 'aria-hidden': 'true', text: row.item.pic }),
+          el('span', { class: 'tile-name', text: row.item.name }),
+          el('span', { class: 'price', text: money(row.item.price) }),
+          row.why.length ? el('span', { class: 'tile-warn', text: 'Not for me: ' + row.why.join(', ') }) : null
         ));
       });
       box.append(heading, tiles,
-        el('p', { class: 'notice', text: 'Allergen details are sample data. Always confirm with staff.' }),
         el('div', { class: 'wiz-actions' }, el('button', { type: 'button', class: 'btn-quiet', 'data-act': 'wizBack', text: 'Go back' }))
       );
+    } else if (wiz.step === 'detail') {
+      var item = menu.byId[wiz.item];
+      var why = conflicts(item);
+      heading = el('h3', { class: 'wiz-q', tabindex: '-1', text: item.name });
+      box.append(heading, el('div', { class: 'detail' },
+        el('p', { class: 'pic', 'aria-hidden': 'true', text: item.pic }),
+        el('p', { class: 'price', text: money(item.price) }),
+        item.original ? el('p', { class: 'original' }, 'On the menu: ', el('span', { lang: menu.langCode || null, text: item.original })) : null,
+        el('p', { text: item.desc }),
+        el('p', { text: hasText(item) }),
+        why.length ? el('p', { class: 'reasons', text: 'Not for me: ' + why.join('; ') + '.' }) : null,
+        el('ul', null, feelLines(item).map(function (line) { return el('li', { text: line }); }))
+      ),
+      el('div', { class: 'wiz-actions' },
+        el('button', { type: 'button', class: 'btn', 'data-wadd': item.id, text: 'Add this' }),
+        el('button', { type: 'button', class: 'btn-quiet', 'data-act': 'wizBackItem', text: 'Go back' })
+      ));
     } else {
-      heading = el('h3', { class: 'wiz-q', tabindex: '-1', text: 'Added: ' + byId[wiz.last].name });
+      heading = el('h3', { class: 'wiz-q', tabindex: '-1', text: 'Added: ' + menu.byId[wiz.last].name });
       box.append(heading,
         el('p', { class: 'wiz-order', text: 'Do you want something else?' }),
         el('div', { class: 'wiz-actions' },
@@ -851,33 +1332,40 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
 
   /* ---------- Order card ---------- */
 
-  function orderLines() {
-    return state.order.map(function (l) { return l.qty + ' ' + byId[l.id].name; });
+  function orderText() {
+    return 'My order. ' + state.order.map(function (l) { return l.qty + ' ' + state.menu.byId[l.id].name; }).join('. ') + '. ' +
+      (state.note ? 'Please note: ' + state.note + '. ' : '') +
+      'Total ' + totalText() + '.';
   }
 
-  function orderText() {
-    return 'My order. ' + orderLines().join('. ') + '. ' +
-      (state.note ? 'Please note: ' + state.note + '. ' : '') +
-      'Total ' + usd(orderTotal()) + '.';
+  /* The order in the crew's language, using the names printed on their menu. */
+  function crewText() {
+    var menu = state.menu, c = menu.crew;
+    if (!c) return orderText();
+    return c.hello + ' ' + state.order.map(function (l) {
+      var item = menu.byId[l.id];
+      return l.qty + ' ' + (item.original || item.name);
+    }).join('. ') + '. ' + (state.note ? c.note + ': ' + state.note + '. ' : '') + c.total + ' ' + totalText() + '.';
   }
 
   function renderCard() {
-    var box = $('card');
+    var box = $('card'), menu = state.menu;
     box.replaceChildren();
-    if (!state.order.length) {
+    if (!menu || !state.order.length) {
       box.append(
         el('p', { class: 'empty', text: 'Your order is empty. Add an item from the menu.' }),
-        el('div', { class: 'wiz-actions' }, el('button', { type: 'button', class: 'btn', 'data-act': 'toMenu', text: 'Go to the menu' }))
+        el('div', { class: 'actions' }, el('button', { type: 'button', class: 'btn', 'data-act': menu ? 'toMenu' : 'toHome', text: 'Go to the menu' }))
       );
       return;
     }
 
     var lines = el('ul');
     state.order.forEach(function (l) {
-      var item = byId[l.id];
+      var item = menu.byId[l.id];
       lines.append(el('li', { class: 'line' },
-        el('span', { class: 'line-name' }, el('strong', { text: l.qty + ' ' }), item.name),
-        el('span', { class: 'price', text: usd(item.price * l.qty) }),
+        el('span', { class: 'line-name' }, el('strong', { text: l.qty + ' ' }), item.name,
+          item.original ? el('span', { class: 'line-sub', lang: menu.langCode || null, text: item.original }) : null),
+        el('span', { class: 'price', text: item.price === null ? '' : money(item.price * l.qty) }),
         el('span', { class: 'qty' },
           el('button', { type: 'button', class: 'btn-quiet', 'data-qty': '-1', 'data-id': l.id, 'aria-label': 'One less: ' + item.name, text: '−' }),
           el('button', { type: 'button', class: 'btn-quiet', 'data-qty': '1', 'data-id': l.id, 'aria-label': 'One more: ' + item.name, text: '+' }),
@@ -891,8 +1379,8 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
 
     box.append(el('div', { class: 'ticket' },
       lines,
-      el('p', { class: 'total' }, el('span', { text: 'Total ' }), el('span', { text: usd(orderTotal()) })),
-      el('div', { class: 'note-field' },
+      el('p', { class: 'total' }, el('span', { text: 'Total ' }), el('span', { text: totalText() })),
+      el('div', { class: 'field' },
         el('label', { for: 'note', text: 'Anything to change?' }),
         el('p', { id: 'noteHint', text: 'Example: no pickles' }),
         note
@@ -911,61 +1399,248 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
     state.order.forEach(function (l, i) { if (l.id === id) index = i; });
     if (index === -1) return;
     var line = state.order[index];
-    var name = byId[id].name;
+    var name = state.menu.byId[id].name;
     if (change === 0 || line.qty + change <= 0) {
       state.order.splice(index, 1);
       renderCard();
       $('h-card').focus();
-      setCaption('Removed ' + name + '. Total ' + usd(orderTotal()) + '.');
+      setCaption('Removed ' + name + '. Total ' + money(orderTotal()) + '.');
       return;
     }
     line.qty += change;
     renderCard();
     var again = document.querySelector('[data-qty="' + change + '"][data-id="' + id + '"]');
     if (again) again.focus();
-    setCaption(line.qty + ' ' + name + '. Total ' + usd(orderTotal()) + '.');
+    setCaption(line.qty + ' ' + name + '. Total ' + money(orderTotal()) + '.');
   }
 
   /* ---------- Crew view ---------- */
 
-  var REPLIES = ['Yes', 'No', 'Please write it down', 'Thank you'];
-
   function renderCrew() {
-    var box = $('crew');
+    var box = $('crew'), menu = state.menu;
+    var c = menu.crew, lang = c ? (menu.langCode || null) : null;
     box.replaceChildren();
 
+    /* Crew language first and large; English underneath for the customer. */
+    function both(key, cls) {
+      return el('p', { class: cls },
+        el('span', { lang: lang, text: c ? c[key] : CREW_EN[key] }),
+        c ? el('span', { class: 'gloss', text: CREW_EN[key] }) : null);
+    }
+
     var lines = el('ul');
-    orderLines().forEach(function (text) {
-      lines.append(el('li', { class: 'line' }, el('span', { class: 'line-name', text: text })));
+    state.order.forEach(function (l) {
+      var item = menu.byId[l.id];
+      var useOriginal = c && item.original;
+      lines.append(el('li', { class: 'line' },
+        el('span', { class: 'line-name' },
+          el('span', { lang: useOriginal ? lang : null, text: l.qty + ' ' + (useOriginal ? item.original : item.name) }),
+          useOriginal ? el('span', { class: 'line-sub', text: item.name }) : null)));
     });
 
     var replies = el('div', { class: 'replies' });
-    REPLIES.forEach(function (text) {
-      replies.append(el('button', { type: 'button', class: 'btn-quiet', 'data-reply': text, text: text }));
+    REPLY_KEYS.forEach(function (key) {
+      replies.append(el('button', { type: 'button', class: 'btn-quiet', 'data-reply': key,
+        text: c ? c[key] + ' (' + CREW_EN[key] + ')' : CREW_EN[key] }));
     });
 
     box.append(el('div', { class: 'ticket crew' },
-      el('p', { class: 'hello', text: 'Hello. This is my order.' }),
-      state.format === 'quiet' ?
-        el('p', { class: 'quiet-line', text: 'I am ordering without speaking. Please point, write, or type your reply.' }) : null,
+      both('hello', 'hello'),
+      state.format === 'quiet' ? both('quiet', 'quiet-line') : null,
       lines,
-      state.note ? el('p', { class: 'crew-note' }, el('strong', { text: 'Please note: ' }), state.note) : null,
-      el('p', { class: 'total' }, el('span', { text: 'Total ' }), el('span', { text: usd(orderTotal()) })),
+      state.note ? el('p', { class: 'crew-note' }, el('strong', { lang: lang, text: (c ? c.note : CREW_EN.note) + ': ' }), state.note) : null,
+      el('p', { class: 'total' }, el('span', { lang: lang, text: (c ? c.total : CREW_EN.total) + ' ' }), el('span', { text: totalText() })),
 
       el('h3', { text: 'Quick replies' }),
       replies,
-      el('p', { class: 'big-say', id: 'bigSay' }),
+      el('p', { class: 'big-say', id: 'bigSay', lang: lang }),
 
-      el('h3', null, el('label', { for: 'crewReply', text: 'Crew: type your reply here' })),
+      el('h3', null, el('label', { for: 'crewReply' },
+        el('span', { lang: lang, text: c && c.reply ? c.reply : CREW_EN.reply }),
+        c && c.reply ? el('span', { class: 'gloss', text: CREW_EN.reply }) : null)),
       el('textarea', { id: 'crewReply', rows: '2' }),
 
       el('div', { class: 'ticket-actions' },
         (canSpeak && state.format !== 'quiet') ?
-          el('button', { type: 'button', class: 'btn', 'data-act': 'playOrder', text: 'Play my order aloud' }) : null,
+          el('button', { type: 'button', class: 'btn', 'data-act': 'playCrew',
+            text: c ? 'Play my order aloud in ' + menu.language : 'Play my order aloud' }) : null,
         el('button', { type: 'button', class: 'btn-quiet', 'data-act': 'toCard', text: 'Back to my order' }),
         el('button', { type: 'button', class: 'btn-quiet', 'data-act': 'newOrder', text: 'Start a new order' })
       )
     ));
+  }
+
+  /* ================= AI: read a photo, answer a question ================= */
+
+  function callAI(system, content, maxTokens) {
+    return fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-api-key': state.key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({ model: state.model, max_tokens: maxTokens, system: system, messages: [{ role: 'user', content: content }] })
+    }).then(function (response) {
+      if (response.status === 401) throw new Error('The AI key was not accepted. Check the key in AI key settings.');
+      if (response.status === 429) throw new Error('Too many requests right now. Wait a moment and try again.');
+      if (!response.ok) throw new Error('The AI service returned an error (' + response.status + '). Try again.');
+      return response.json();
+    }).then(function (data) {
+      return (data.content || []).map(function (block) { return block.type === 'text' ? block.text : ''; }).join('\n');
+    });
+  }
+
+  var SCAN_SYSTEM = 'You read restaurant menus for people who need clear, plain information before they order. ' +
+    'Reply with one JSON object only. No markdown, no code fences, no text before or after the JSON.';
+
+  var SCAN_PROMPT = [
+    'Read the menu in this photo and return JSON with exactly this shape:',
+    '{',
+    '  "restaurant": string (the restaurant name if printed, else ""),',
+    '  "language": string (English name of the language the menu is written in),',
+    '  "lang_code": string (BCP-47 code for that language, like "fr-FR"),',
+    '  "currency": string (the currency symbol used, like "$" or "€"),',
+    '  "crew": null if the menu is in English, otherwise these phrases translated into the menu language:',
+    '    {"hello": "Hello. This is my order.", "quiet": "I am ordering without speaking. Please point, write, or type your reply.", "note": "Please note", "total": "Total", "yes": "Yes", "no": "No", "write": "Please write it down", "thanks": "Thank you", "reply": "Crew: type your reply here"},',
+    '  "items": [{',
+    '    "name": plain English name of the dish,',
+    '    "original": the dish name exactly as printed,',
+    '    "category": short English category name, like "Starters" or "Drinks",',
+    '    "price": number, or null if not printed,',
+    '    "desc": one or two short plain English sentences: what the dish is and its main ingredients,',
+    '    "has": array of likely allergens from ["milk","egg","wheat","soy","fish","shellfish","peanut","treenut","sesame"],',
+    '    "vegetarian": true or false, "vegan": true or false, "pork": true or false,',
+    '    "feel": array from ["crunchy","chewy","mushy","jelly","spicy","sour","strongsmell","mixed"] ("jelly" means jelly-like or slimy, "mixed" means foods mixed or touching),',
+    '    "texture": short phrase, "taste": short phrase, "smell": short phrase, "color": short phrase,',
+    '    "temp": "hot", "cold", or "room",',
+    '    "pic": one emoji that looks most like the dish',
+    '  }]',
+    '}',
+    'Rules: list at most 30 items, in menu order. Use simple words a ten-year-old knows, and explain unfamiliar dish names in "desc". ',
+    'When you are unsure whether an allergen is present, include it. Do not invent dishes or prices that are not in the photo. ',
+    'If the photo is not a menu, return {"items": []}.'
+  ].join('\n');
+
+  function parseJSON(text) {
+    var body = text.replace(/```json|```/g, '');
+    var start = body.indexOf('{'), end = body.lastIndexOf('}');
+    if (start === -1 || end <= start) throw new Error('The menu could not be read. Try a clearer photo.');
+    try { return JSON.parse(body.slice(start, end + 1)); }
+    catch (e) { throw new Error('The menu could not be read. Try a clearer photo.'); }
+  }
+
+  /* Shrinks the photo so it uploads quickly. Falls back to the file as it is. */
+  function preparePhoto(file) {
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();
+      reader.onerror = function () { reject(new Error('That file could not be opened. Choose a photo.')); };
+      reader.onload = function () {
+        var original = String(reader.result);
+        var img = new Image();
+        img.onerror = function () { resolve(original); };
+        img.onload = function () {
+          try {
+            var scale = Math.min(1, 1568 / Math.max(img.width, img.height));
+            var canvas = document.createElement('canvas');
+            canvas.width = Math.round(img.width * scale);
+            canvas.height = Math.round(img.height * scale);
+            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL('image/jpeg', 0.85));
+          } catch (e) { resolve(original); }
+        };
+        img.src = original;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function renderScan() {
+    $('scanNeedKey').hidden = !!state.key;
+    $('keyInput').value = state.key;
+    $('modelSel').value = state.model;
+    $('scanFile').disabled = state.busy;
+    if (!state.busy) { $('scanStatus').textContent = ''; }
+  }
+
+  function scanFile(file) {
+    if (!file || state.busy) return;
+    if (!state.key) {
+      $('keyBox').open = true;
+      $('scanFile').value = '';
+      setCaption('Add an AI key first. The AI key settings are open below.');
+      return;
+    }
+    state.busy = true;
+    $('scanFile').disabled = true;
+    $('scanStatus').textContent = 'Reading the menu. This can take up to a minute.';
+    setCaption('Reading the menu. This can take up to a minute.');
+
+    var photo;
+    preparePhoto(file).then(function (dataUrl) {
+      photo = dataUrl;
+      $('scanPreview').src = dataUrl;
+      $('scanPreview').hidden = false;
+      var match = dataUrl.match(/^data:(image\/(?:jpeg|png|gif|webp));base64,(.+)$/);
+      if (!match) throw new Error('That photo type is not supported. Use a JPEG or PNG photo.');
+      return callAI(SCAN_SYSTEM, [
+        { type: 'image', source: { type: 'base64', media_type: match[1], data: match[2] } },
+        { type: 'text', text: SCAN_PROMPT }
+      ], 8000);
+    }).then(function (text) {
+      var data = parseJSON(text);
+      var menu = buildMenu({
+        name: clean(data.restaurant) || 'Scanned menu',
+        language: data.language, langCode: data.lang_code, currency: data.currency,
+        crew: data.crew, items: data.items, estimated: true, photo: photo
+      });
+      if (!menu.items.length) throw new Error('No menu items were found in that photo. Try a closer, clearer photo.');
+      finishScan();
+      openMenu(menu);
+    }).catch(function (error) {
+      finishScan();
+      var message = error && error.message && error.message.indexOf('Failed to fetch') === -1 ?
+        error.message : 'Could not reach the AI service. Check the internet connection and try again.';
+      $('scanStatus').textContent = message;
+      setCaption(message);
+    });
+  }
+
+  function finishScan() {
+    state.busy = false;
+    $('scanFile').disabled = false;
+    $('scanFile').value = '';
+    $('scanStatus').textContent = '';
+  }
+
+  var ASK_SYSTEM = 'You answer a customer\'s question about one restaurant menu. Use only the menu data you are given. ' +
+    'Answer in at most three short, plain sentences, with no lists or markdown. ' +
+    'If the data does not say, say you do not know and suggest asking the staff. Do not give medical advice.';
+
+  function askAI(question) {
+    var menu = state.menu;
+    var data = menu.items.map(function (i) {
+      return { name: i.name, original: i.original, category: i.cat, price: i.price, desc: i.desc, has: i.has,
+        vegetarian: i.vegetarian, vegan: i.vegan, pork: i.pork, feel: i.feel, texture: i.texture, taste: i.taste, smell: i.smell, temp: i.temp };
+    });
+    showAnswer('Thinking about your question.');
+    setCaption('Thinking about your question.');
+    callAI(ASK_SYSTEM, [{ type: 'text', text:
+      'Menu (' + menu.name + ', prices in ' + menu.currency + '):\n' + JSON.stringify(data) +
+      '\n\nThe customer avoids: ' + JSON.stringify(state.needs) +
+      '\n\nQuestion: ' + question }], 300)
+      .then(function (text) {
+        var answer = clean(text, 600) || 'No answer came back. Try asking in another way.';
+        showAnswer(answer + ' (Answered by AI. Confirm with staff.)');
+        tell(answer);
+      })
+      .catch(function (error) {
+        var message = error && error.message && error.message.indexOf('Failed to fetch') === -1 ?
+          error.message : 'Could not reach the AI service. Check the internet connection and try again.';
+        showAnswer(message);
+        setCaption(message);
+      });
   }
 
   /* ================= Events ================= */
@@ -974,45 +1649,80 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
     var target = event.target.closest('button');
     if (!target) return;
     var data = target.dataset;
+    var menu = state.menu;
 
-    if (data.format) { setFormat(data.format, false); return; }
+    if (data.format) { chooseFormat(data.format); return; }
+    if (data.sample) { openMenu(buildMenu(SAMPLES[parseInt(data.sample, 10)])); return; }
 
     if (data.add) {
       addToOrder(data.add);
       renderBar();
-      tell('Added ' + byId[data.add].name + '. ' + plural(orderCount(), 'item') + ' in your order. Total ' + usd(orderTotal()) + '.');
+      tell('Added ' + menu.byId[data.add].name + '. ' + plural(orderCount(), 'item') + ' in your order. Total ' + money(orderTotal()) + '.');
       return;
     }
 
     if (data.listen) {
-      var item = byId[data.listen];
-      tell(item.name + '. ' + usd(item.price) + '. ' + item.desc + ' ' + hasText(item), true);
+      var item = menu.byId[data.listen];
+      tell(item.name + '. ' + money(item.price) + '. ' + item.desc + ' ' + hasText(item) + ' ' + feelLines(item).join(' '), true);
       return;
     }
 
     if (data.wcat) { state.wiz.step = 'item'; state.wiz.cat = data.wcat; renderWizard(true); return; }
-
-    if (data.witem) {
-      addToOrder(data.witem);
+    if (data.witem) { state.wiz.step = 'detail'; state.wiz.item = data.witem; renderWizard(true); return; }
+    if (data.wadd) {
+      addToOrder(data.wadd);
       state.wiz.step = 'more';
-      state.wiz.last = data.witem;
+      state.wiz.last = data.wadd;
       renderWizard(true);
-      setCaption('Added ' + byId[data.witem].name + '.');
+      setCaption('Added ' + menu.byId[data.wadd].name + '.');
       return;
     }
 
     if (data.qty !== undefined) { changeQty(data.id, parseInt(data.qty, 10)); return; }
 
     if (data.reply) {
-      $('bigSay').textContent = data.reply;
-      tell(data.reply, true);
+      var c = menu.crew;
+      $('bigSay').textContent = c ? c[data.reply] : CREW_EN[data.reply];
+      setCaption(c ? c[data.reply] + ' (' + CREW_EN[data.reply] + ')' : CREW_EN[data.reply]);
+      if (state.format !== 'quiet') speak(c ? c[data.reply] : CREW_EN[data.reply], c ? menu.langCode : 'en-US');
       return;
     }
 
     switch (data.act) {
+      case 'needsDone':
+        readNeeds();
+        if (menu) setView('menu'); else setView('home');
+        setCaption('Food needs saved. ' + plural(needsCount(), 'need') + ' set.');
+        break;
+      case 'needsClear':
+        state.needs = emptyNeeds();
+        saveNeeds();
+        syncNeeds();
+        setCaption('Food needs cleared.');
+        break;
+      case 'toNeeds': stopSpeaking(); setView('needs'); break;
+      case 'toHome': stopSpeaking(); setView('home'); break;
+      case 'toScan': setView('scan'); break;
+      case 'saveKey':
+        state.key = $('keyInput').value.trim();
+        state.model = $('modelSel').value;
+        store('key', state.key || null);
+        store('model', state.model);
+        renderScan();
+        setCaption(state.key ? 'Key saved in this browser.' : 'No key entered.');
+        break;
+      case 'removeKey':
+        state.key = '';
+        store('key', null);
+        renderScan();
+        setCaption('Key removed from this browser.');
+        break;
+      case 'clearFind': clearFind(); break;
       case 'wizBack':
       case 'wizMore':
         state.wiz.step = 'cat'; renderWizard(true); break;
+      case 'wizBackItem':
+        state.wiz.step = 'item'; renderWizard(true); break;
       case 'toMenu':
         state.wiz.step = 'cat'; setView('menu'); break;
       case 'toCard':
@@ -1021,11 +1731,15 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
         setView('crew'); break;
       case 'playOrder':
         tell(orderText(), true); break;
+      case 'playCrew':
+        setCaption(crewText());
+        speak(crewText(), menu.crew ? menu.langCode : 'en-US');
+        break;
       case 'newOrder':
         stopSpeaking();
         state.order = [];
         state.note = '';
-        state.wiz = { step: 'cat', cat: null, last: null };
+        state.wiz = { step: 'cat', cat: null, item: null, last: null };
         setView('menu');
         setCaption('New order started.');
         break;
@@ -1034,32 +1748,40 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
 
   function init() {
     buildStart();
-    buildFilters();
+    buildNeeds();
+    buildHome();
 
     document.addEventListener('click', onClick);
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape' && state.speaking) stopSpeaking();
     });
     document.addEventListener('input', function (event) {
-      if (event.target.id === 'note') state.note = event.target.value.trim();
+      if (event.target.id === 'note') state.note = clean(event.target.value, 200);
     });
 
     $('askForm').addEventListener('submit', function (event) { event.preventDefault(); runAsk(); });
     $('voiceBtn').addEventListener('click', startVoice);
-    $('clearBtn').addEventListener('click', clearFilters);
-    $('filters').addEventListener('change', readFilterControls);
+    $('fCat').addEventListener('change', function () { state.find.cat = $('fCat').value; renderList(); setCaption($('count').textContent); });
+    $('fSort').addEventListener('change', function () { state.find.sort = $('fSort').value; renderList(); setCaption($('fSort').value === 'price' ? 'Lowest price first.' : 'Menu order.'); });
+    $('scanFile').addEventListener('change', function (event) { scanFile(event.target.files && event.target.files[0]); });
     $('stopBtn').addEventListener('click', stopSpeaking);
     $('reviewBtn').addEventListener('click', function () { stopSpeaking(); setView('card'); });
-    $('changeFormat').addEventListener('click', function () {
-      stopSpeaking();
-      setView('start');
-      setCaption('');
-    });
+    $('changeFormat').addEventListener('click', function () { stopSpeaking(); setView('start'); setCaption(''); });
+    $('editNeeds').addEventListener('click', function () { stopSpeaking(); setView('needs'); });
+    $('chooseMenu').addEventListener('click', function () { stopSpeaking(); setView('home'); });
 
-    var saved = null;
-    try { saved = window.localStorage.getItem('comfortmenu.format'); } catch (e) { saved = null; }
-    if (saved && FORMATS.some(function (f) { return f.id === saved; })) setFormat(saved, true);
-    else renderBar();
+    state.key = load('key') || '';
+    var model = load('model');
+    if (model) state.model = model;
+    loadNeeds();
+
+    var saved = load('format');
+    if (saved && applyFormat(saved)) {
+      setView(state.needsSaved ? 'home' : 'needs');
+      setCaption('Opened in your saved format: ' + $('formatLabel').textContent + '.');
+    } else {
+      renderBar();
+    }
   }
 
   init();
