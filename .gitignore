@@ -1,0 +1,14 @@
+# Secrets: never upload these
+.env
+backend/.env
+*.env
+!.env.example
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store

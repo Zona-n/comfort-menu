@@ -198,7 +198,7 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
 .ask { margin-top: 1.25rem; }
 .ask-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.4rem; }
 .ask-row input { flex: 1 1 14rem; }
-.answer { margin-top: 0.75rem; padding: 0.75rem 1rem; background: var(--surface); border: var(--edge) solid var(--ink); border-radius: 0.5rem; }
+.answer { white-space: pre-line; margin-top: 0.75rem; padding: 0.75rem 1rem; background: var(--surface); border: var(--edge) solid var(--ink); border-radius: 0.5rem; }
 .box { margin-top: 1rem; border: var(--edge) solid var(--line); border-radius: 0.5rem; background: var(--surface); }
 .box > summary { padding: 0.65rem 1rem; font-weight: 700; cursor: pointer; min-height: 2.75rem; }
 .box-in { padding: 0.25rem 1rem 1rem; }
@@ -351,32 +351,13 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
   <section id="view-scan" aria-labelledby="h-scan" hidden>
     <h2 id="h-scan" tabindex="-1">Scan a menu</h2>
     <p class="lead">Take or choose a photo of a menu in any language. Comfort Menu reads it, translates it to English, and explains each dish in plain words.</p>
-    <p class="notice" id="scanNeedKey" hidden>Reading a photo uses AI and needs a key. Add a key below, or go back and try the sample French menu.</p>
+    <p class="notice" id="scanServer"></p>
     <div class="field">
       <label for="scanFile">Photo of the menu</label>
       <input type="file" id="scanFile" accept="image/*">
     </div>
     <p class="count" id="scanStatus"></p>
     <img class="preview" id="scanPreview" alt="Your photo of the menu" hidden>
-    <details class="box" id="keyBox">
-      <summary>AI key settings</summary>
-      <div class="box-in">
-        <label for="keyInput">Anthropic API key</label>
-        <p class="hint" id="keyHint">Saved only in this browser. Sent only to Anthropic when you scan a menu or ask a question. Never put a key in code or on GitHub.</p>
-        <input type="password" id="keyInput" autocomplete="off" aria-describedby="keyHint">
-        <div class="field">
-          <label for="modelSel">Reading speed</label>
-          <select id="modelSel">
-            <option value="claude-haiku-4-5-20251001">Faster</option>
-            <option value="claude-sonnet-5-5">More careful</option>
-          </select>
-        </div>
-        <div class="actions">
-          <button type="button" class="btn" data-act="saveKey">Save key</button>
-          <button type="button" class="btn-quiet" data-act="removeKey">Remove key</button>
-        </div>
-      </div>
-    </details>
     <p class="notice" id="scanDisclaimer"></p>
     <div class="actions">
       <button type="button" class="btn-quiet" data-act="toHome">Go back</button>
@@ -460,6 +441,14 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
 <script>
 (function () {
   'use strict';
+
+  /* ================= Server ================= */
+
+  /* Address of the Comfort Menu server (the Python backend).
+     Leave empty when the server also serves this page, for example at http://localhost:8000.
+     If the server is hosted somewhere else, put its address here, like 'https://your-server.example.com'.
+     This address is not a secret. The AI key never goes in this file; it stays on the server. */
+  var API_BASE = '';
 
   /* ================= Fixed text and options ================= */
 
@@ -639,8 +628,8 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
     wiz: { step: 'cat', cat: null, item: null, last: null },
     speaking: false,
     busy: false,
-    key: '',
-    model: 'claude-haiku-4-5-20251001'
+    backend: false,       // true when the Comfort Menu server answers and has an AI key
+    backendNote: ''
   };
 
   var canSpeak = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
@@ -702,6 +691,8 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
         pork: r.pork === true,
         texture: clean(r.texture, 120), taste: clean(r.taste, 120), smell: clean(r.smell, 120), color: clean(r.color, 120),
         temp: ['hot', 'cold', 'room'].indexOf(r.temp) !== -1 ? r.temp : '',
+        calories: clean(r.calories, 40),
+        notes: clean(r.notes, 160),
         pic: clean(r.pic, 8) || '🍽️'
       };
       if (item.original.toLowerCase() === item.name.toLowerCase()) item.original = '';
@@ -734,6 +725,8 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
     if (item.smell) lines.push('Smell: ' + item.smell + '.');
     if (item.color) lines.push('Color: ' + item.color + '.');
     if (item.temp) lines.push(item.temp === 'room' ? 'Served at room temperature.' : 'Served ' + item.temp + '.');
+    if (item.calories) lines.push('Calories: ' + item.calories + '.');
+    if (item.notes) lines.push('Menu notes: ' + item.notes + '.');
     return lines;
   }
 
@@ -1130,10 +1123,10 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
     var understood = parsed.max !== null || parsed.avoid.length || parsed.vegetarian || parsed.words.length;
     var looksLikeQuestion = /\?|^\s*(what|which|is|are|does|do|can|how|why|tell)\b/i.test(text);
 
-    if (state.key && (!understood || looksLikeQuestion)) { askAI(text); return; }
+    if (state.backend && (!understood || looksLikeQuestion)) { askAI(text); return; }
     if (!understood) {
       showAnswer('');
-      tell((looksLikeQuestion ? 'Open questions need an AI key, which you can add under Scan a menu. Without one, search by food words, prices, and things to avoid. '
+      tell((looksLikeQuestion ? 'Open questions need the Comfort Menu server, which is not connected. Without it, search by food words, prices, and things to avoid. '
         : 'No food word, price, or thing to avoid found in that. ') + $('askHint').textContent + '.');
       return;
     }
@@ -1470,65 +1463,38 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
     ));
   }
 
-  /* ================= AI: read a photo, answer a question ================= */
+  /* ================= Server: read a photo, answer a question ================= */
 
-  function callAI(system, content, maxTokens) {
-    return fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'x-api-key': state.key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({ model: state.model, max_tokens: maxTokens, system: system, messages: [{ role: 'user', content: content }] })
+  /* The AI runs on the Comfort Menu server (backend/app.py). The page never holds an AI key. */
+  function api(path, body) {
+    return fetch(API_BASE + path, {
+      method: body ? 'POST' : 'GET',
+      headers: body ? { 'content-type': 'application/json' } : {},
+      body: body ? JSON.stringify(body) : undefined
     }).then(function (response) {
-      if (response.status === 401) throw new Error('The AI key was not accepted. Check the key in AI key settings.');
-      if (response.status === 429) throw new Error('Too many requests right now. Wait a moment and try again.');
-      if (!response.ok) throw new Error('The AI service returned an error (' + response.status + '). Try again.');
-      return response.json();
-    }).then(function (data) {
-      return (data.content || []).map(function (block) { return block.type === 'text' ? block.text : ''; }).join('\n');
+      return response.json().catch(function () { return {}; }).then(function (data) {
+        if (!response.ok) throw new Error(data.error || 'The server returned an error (' + response.status + '). Try again.');
+        return data;
+      });
     });
   }
 
-  var SCAN_SYSTEM = 'You read restaurant menus for people who need clear, plain information before they order. ' +
-    'Reply with one JSON object only. No markdown, no code fences, no text before or after the JSON.';
+  function friendly(error) {
+    var message = error && error.message ? error.message : '';
+    if (!message || /Failed to fetch|NetworkError|Load failed/i.test(message)) {
+      return 'Could not reach the Comfort Menu server. Check that it is running and try again.';
+    }
+    return message;
+  }
 
-  var SCAN_PROMPT = [
-    'Read the menu in this photo and return JSON with exactly this shape:',
-    '{',
-    '  "restaurant": string (the restaurant name if printed, else ""),',
-    '  "language": string (English name of the language the menu is written in),',
-    '  "lang_code": string (BCP-47 code for that language, like "fr-FR"),',
-    '  "currency": string (the currency symbol used, like "$" or "€"),',
-    '  "crew": null if the menu is in English, otherwise these phrases translated into the menu language:',
-    '    {"hello": "Hello. This is my order.", "quiet": "I am ordering without speaking. Please point, write, or type your reply.", "note": "Please note", "total": "Total", "yes": "Yes", "no": "No", "write": "Please write it down", "thanks": "Thank you", "reply": "Crew: type your reply here"},',
-    '  "items": [{',
-    '    "name": plain English name of the dish,',
-    '    "original": the dish name exactly as printed,',
-    '    "category": short English category name, like "Starters" or "Drinks",',
-    '    "price": number, or null if not printed,',
-    '    "desc": one or two short plain English sentences: what the dish is and its main ingredients,',
-    '    "has": array of likely allergens from ["milk","egg","wheat","soy","fish","shellfish","peanut","treenut","sesame"],',
-    '    "vegetarian": true or false, "vegan": true or false, "pork": true or false,',
-    '    "feel": array from ["crunchy","chewy","mushy","jelly","spicy","sour","strongsmell","mixed"] ("jelly" means jelly-like or slimy, "mixed" means foods mixed or touching),',
-    '    "texture": short phrase, "taste": short phrase, "smell": short phrase, "color": short phrase,',
-    '    "temp": "hot", "cold", or "room",',
-    '    "pic": one emoji that looks most like the dish',
-    '  }]',
-    '}',
-    'Rules: list at most 30 items, in menu order. Use simple words a ten-year-old knows, and explain unfamiliar dish names in "desc". ',
-    'When you are unsure whether an allergen is present, include it. Do not invent dishes or prices that are not in the photo. ',
-    'If the photo is not a menu, return {"items": []}.'
-  ].join('\n');
-
-  function parseJSON(text) {
-    var body = text.replace(/```json|```/g, '');
-    var start = body.indexOf('{'), end = body.lastIndexOf('}');
-    if (start === -1 || end <= start) throw new Error('The menu could not be read. Try a clearer photo.');
-    try { return JSON.parse(body.slice(start, end + 1)); }
-    catch (e) { throw new Error('The menu could not be read. Try a clearer photo.'); }
+  function checkBackend() {
+    return api('/api/health').then(function (data) {
+      state.backend = !!data && data.ok === true && data.ai === true;
+      state.backendNote = data && data.ok === true && data.ai !== true ? 'nokey' : '';
+    }).catch(function () {
+      state.backend = false;
+      state.backendNote = '';
+    }).then(function () { if (state.view === 'scan') renderScan(); });
   }
 
   /* Shrinks the photo so it uploads quickly. Falls back to the file as it is. */
@@ -1557,19 +1523,21 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
   }
 
   function renderScan() {
-    $('scanNeedKey').hidden = !!state.key;
-    $('keyInput').value = state.key;
-    $('modelSel').value = state.model;
+    $('scanServer').textContent = state.backend ?
+      'Connected to the Comfort Menu server. Your photo is read by AI on the server.' :
+      state.backendNote === 'nokey' ?
+        'The Comfort Menu server is running but has no AI key yet, so it cannot read photos. You can still use the sample restaurants.' :
+        'Scanning needs the Comfort Menu server, and it is not connected. You can still use the sample restaurants.';
     $('scanFile').disabled = state.busy;
     if (!state.busy) { $('scanStatus').textContent = ''; }
   }
 
   function scanFile(file) {
     if (!file || state.busy) return;
-    if (!state.key) {
-      $('keyBox').open = true;
+    if (!state.backend) {
       $('scanFile').value = '';
-      setCaption('Add an AI key first. The AI key settings are open below.');
+      setCaption($('scanServer').textContent);
+      checkBackend();
       return;
     }
     state.busy = true;
@@ -1582,14 +1550,12 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
       photo = dataUrl;
       $('scanPreview').src = dataUrl;
       $('scanPreview').hidden = false;
-      var match = dataUrl.match(/^data:(image\/(?:jpeg|png|gif|webp));base64,(.+)$/);
-      if (!match) throw new Error('That photo type is not supported. Use a JPEG or PNG photo.');
-      return callAI(SCAN_SYSTEM, [
-        { type: 'image', source: { type: 'base64', media_type: match[1], data: match[2] } },
-        { type: 'text', text: SCAN_PROMPT }
-      ], 8000);
-    }).then(function (text) {
-      var data = parseJSON(text);
+      if (!/^data:image\/(?:jpeg|png|gif|webp);base64,/.test(dataUrl)) {
+        throw new Error('That photo type is not supported. Use a JPEG or PNG photo.');
+      }
+      return api('/api/scan', { image: dataUrl });
+    }).then(function (result) {
+      var data = result.menu || {};
       var menu = buildMenu({
         name: clean(data.restaurant) || 'Scanned menu',
         language: data.language, langCode: data.lang_code, currency: data.currency,
@@ -1600,8 +1566,7 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
       openMenu(menu);
     }).catch(function (error) {
       finishScan();
-      var message = error && error.message && error.message.indexOf('Failed to fetch') === -1 ?
-        error.message : 'Could not reach the AI service. Check the internet connection and try again.';
+      var message = friendly(error);
       $('scanStatus').textContent = message;
       setCaption(message);
     });
@@ -1614,30 +1579,23 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
     $('scanStatus').textContent = '';
   }
 
-  var ASK_SYSTEM = 'You answer a customer\'s question about one restaurant menu. Use only the menu data you are given. ' +
-    'Answer in at most three short, plain sentences, with no lists or markdown. ' +
-    'If the data does not say, say you do not know and suggest asking the staff. Do not give medical advice.';
-
   function askAI(question) {
     var menu = state.menu;
-    var data = menu.items.map(function (i) {
+    var items = menu.items.map(function (i) {
       return { name: i.name, original: i.original, category: i.cat, price: i.price, desc: i.desc, has: i.has,
-        vegetarian: i.vegetarian, vegan: i.vegan, pork: i.pork, feel: i.feel, texture: i.texture, taste: i.taste, smell: i.smell, temp: i.temp };
+        vegetarian: i.vegetarian, vegan: i.vegan, pork: i.pork, feel: i.feel, texture: i.texture, taste: i.taste,
+        smell: i.smell, temp: i.temp, calories: i.calories, notes: i.notes };
     });
     showAnswer('Thinking about your question.');
     setCaption('Thinking about your question.');
-    callAI(ASK_SYSTEM, [{ type: 'text', text:
-      'Menu (' + menu.name + ', prices in ' + menu.currency + '):\n' + JSON.stringify(data) +
-      '\n\nThe customer avoids: ' + JSON.stringify(state.needs) +
-      '\n\nQuestion: ' + question }], 300)
-      .then(function (text) {
-        var answer = clean(text, 600) || 'No answer came back. Try asking in another way.';
-        showAnswer(answer + ' (Answered by AI. Confirm with staff.)');
+    api('/api/ask', { question: question, menu: { name: menu.name, currency: menu.currency, items: items }, needs: state.needs })
+      .then(function (result) {
+        var answer = clean(result.answer, 900) || 'No answer came back. Try asking in another way.';
+        showAnswer(answer + '\n(Answered by AI. Confirm with staff.)');
         tell(answer);
       })
       .catch(function (error) {
-        var message = error && error.message && error.message.indexOf('Failed to fetch') === -1 ?
-          error.message : 'Could not reach the AI service. Check the internet connection and try again.';
+        var message = friendly(error);
         showAnswer(message);
         setCaption(message);
       });
@@ -1703,20 +1661,6 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
       case 'toNeeds': stopSpeaking(); setView('needs'); break;
       case 'toHome': stopSpeaking(); setView('home'); break;
       case 'toScan': setView('scan'); break;
-      case 'saveKey':
-        state.key = $('keyInput').value.trim();
-        state.model = $('modelSel').value;
-        store('key', state.key || null);
-        store('model', state.model);
-        renderScan();
-        setCaption(state.key ? 'Key saved in this browser.' : 'No key entered.');
-        break;
-      case 'removeKey':
-        state.key = '';
-        store('key', null);
-        renderScan();
-        setCaption('Key removed from this browser.');
-        break;
       case 'clearFind': clearFind(); break;
       case 'wizBack':
       case 'wizMore':
@@ -1770,10 +1714,8 @@ input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; accent-color:
     $('editNeeds').addEventListener('click', function () { stopSpeaking(); setView('needs'); });
     $('chooseMenu').addEventListener('click', function () { stopSpeaking(); setView('home'); });
 
-    state.key = load('key') || '';
-    var model = load('model');
-    if (model) state.model = model;
     loadNeeds();
+    checkBackend();
 
     var saved = load('format');
     if (saved && applyFormat(saved)) {
