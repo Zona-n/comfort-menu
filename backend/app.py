@@ -92,22 +92,67 @@ def check_rate_limit():
     recent.append(now)
 
 
-def ask_gemini(model, contents, as_json=False):
-    config = types.GenerateContentConfig(
-        temperature=0.2,
-        response_mime_type="application/json" if as_json else "text/plain",
-    )
+def safe_detail(error):
+    """A short reason that is safe to show on the page: never contains the key."""
+    detail = " ".join(str(error).split())
+    if api_key():
+        detail = detail.replace(api_key(), "[key hidden]")
+    return detail[:220]
+
+
+def ai_failed(errors):
+    for line in errors:
+        app.logger.error("Gemini call failed: %s", line)
+    reason = errors[-1] if errors else "no reason given"
+    raise ApiError(502, "The AI service could not answer. Reason: " + reason)
+
+
+def ask_gemini_text(prompt):
+    """Same call as the notebook: client.models.generate_content(model=..., contents=prompt)."""
+    client = get_client()
     try:
-        response = get_client().models.generate_content(model=model, contents=contents, config=config)
-    except ApiError:
-        raise
+        response = client.models.generate_content(model=TEXT_MODEL, contents=prompt)
+        return (response.text or "").strip()
     except Exception as error:  # network problems, a wrong model name, a rejected key
-        detail = str(error)
-        if api_key():
-            detail = detail.replace(api_key(), "[key hidden]")
-        app.logger.error("Gemini call failed: %s", detail)
-        raise ApiError(502, "The AI service could not answer. Try again in a moment.")
-    return (response.text or "").strip()
+        ai_failed([TEXT_MODEL + ": " + safe_detail(error)])
+
+
+def ask_gemini_photo(photo, mime_type, prompt):
+    """Reads a photo. Tries the notebook's way first, then two fallbacks."""
+    client = get_client()
+    errors = []
+
+    # 1. The notebook's way: the Interactions API with the scan model.
+    try:
+        interaction = client.interactions.create(
+            model=SCAN_MODEL,
+            input=[
+                {"type": "text", "text": prompt},
+                {"type": "image", "data": base64.b64encode(photo).decode("ascii"), "mime_type": mime_type},
+            ],
+        )
+        text = (getattr(interaction, "output_text", "") or "").strip()
+        if text:
+            return text
+        errors.append(SCAN_MODEL + " (interactions): empty answer")
+    except Exception as error:
+        errors.append(SCAN_MODEL + " (interactions): " + safe_detail(error))
+
+    # 2 and 3. The generate_content call, with the scan model and then the text model.
+    for model in (SCAN_MODEL, TEXT_MODEL):
+        try:
+            response = client.models.generate_content(
+                model=model,
+                contents=[types.Part.from_bytes(data=photo, mime_type=mime_type), prompt],
+            )
+            text = (response.text or "").strip()
+            if text:
+                return text
+            errors.append(model + ": empty answer")
+        except Exception as error:
+            errors.append(model + ": " + safe_detail(error))
+
+    ai_failed(errors)
 
 
 def parse_json(text):
@@ -125,7 +170,7 @@ def parse_json(text):
 # This asks for the same reading as JSON, so the page can filter, sort, and speak it.
 # The texture guidance comes from the notebook's filter_menu_by_texture prompt.
 SCAN_PROMPT = """You read restaurant menus for people who need clear, plain information before they order.
-Read the menu in this photo into a readable, organized structure. Return one JSON object with exactly this shape:
+Read the menu in this photo into a readable, organized structure. Return one JSON object only, with no markdown and no text before or after it, in exactly this shape:
 {
   "restaurant": string (the restaurant name if printed, else ""),
   "language": string (English name of the language the menu is written in),
@@ -226,11 +271,7 @@ def scan():
     if len(photo) > MAX_PHOTO_BYTES:
         raise ApiError(413, "That photo is too large. Use a smaller photo.")
 
-    text = ask_gemini(
-        SCAN_MODEL,
-        [types.Part.from_bytes(data=photo, mime_type=match.group(1)), SCAN_PROMPT],
-        as_json=True,
-    )
+    text = ask_gemini_photo(photo, match.group(1), SCAN_PROMPT)
     menu = parse_json(text)
     if not isinstance(menu.get("items"), list):
         menu["items"] = []
@@ -259,7 +300,7 @@ def ask():
         currency=str(menu.get("currency", "$"))[:4],
         menu=json.dumps(items[:60], ensure_ascii=False)[:40000],
     )
-    answer = ask_gemini(TEXT_MODEL, prompt)
+    answer = ask_gemini_text(prompt)
     return jsonify({"answer": answer[:900] or "No answer came back. Try asking in another way."})
 
 
